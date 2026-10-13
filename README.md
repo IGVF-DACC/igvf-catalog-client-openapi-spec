@@ -35,8 +35,10 @@ Jobs:
    - Pushes the result. On the release channel it also creates the GitHub release, which triggers the client's PyPI publish workflow.
 3. **publish-spec**: commits the spec to this repo's channel branch once every client has succeeded. On release it also creates the `vX.Y.Z` release here, with the spec files attached.
 4. **mcp** (release only)
-   - Waits for `igvf-catalog-async-client==X.Y.Z` to appear on PyPI.
-   - Bumps `igvf-catalog-mcp` to `X.Y.Z` with the client pinned, runs its tests, pushes `main` and `dev`, and releases it, which publishes it to PyPI.
+   - Bumps `igvf-catalog-mcp` to `X.Y.Z` (`scripts/bump_mcp.py`), pinned to `igvf-catalog-async-client==X.Y.Z`.
+   - Runs its tests against the async client wheel built in the clients job.
+   - Waits for that client to appear on PyPI.
+   - Pushes `main` and `dev` and releases it, which publishes it to PyPI.
 
 A release that already exists in any of these repos makes the run fail before anything is generated. Existing releases are never overwritten.
 
@@ -82,6 +84,7 @@ scripts/generate_client.sh python ../igvf-catalog-python-client build 1.3.1.dev0
 | `scripts/generate_client.sh` | Wipes the files listed in `.openapi-generator/FILES`, runs the generator, reorders the README and copies the specs in |
 | `scripts/reorder_readme.py` + `ordering.txt` | Orders the README endpoint table by `ordering.txt` (add new endpoints there) |
 | `scripts/smoke_test_python.py` | Offline import, version and API check for an installed Python client |
+| `scripts/bump_mcp.py` | Sets the igvf-catalog-mcp version and pins it to the matching async client (release job) |
 | `config/*.yaml` | Generator options per client. License (MIT) and author (IGVF DACC) are set here |
 | `openapitools.json` | Pins openapi-generator **7.14.0** for every client. Upgrade it deliberately, in its own change |
 | `openapi_spec.json`, `openapi_spec_processed.json` | The latest spec for this branch, written by CI |
