@@ -1,0 +1,9 @@
+# Same as python.yaml, with the asyncio library.
+library: asyncio
+packageName: igvf_catalog_async_client
+projectName: igvf-catalog-async-client
+packageUrl: https://github.com/IGVF-DACC/igvf-catalog-async-python-client
+useOneOfDiscriminatorLookup: true
+licenseInfo: MIT
+infoName: IGVF DACC
+infoEmail: encode-help@lists.stanford.edu

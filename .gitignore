@@ -218,3 +218,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generator CLI / local runs
+node_modules/
+/catalog/
+/build/
+/out/

@@ -1,0 +1,11 @@
+# openapi-generator 7.14.0 `-g python` options (see `config-help -g python`).
+# licenseInfo/infoName/infoEmail aren't generator options, but they feed the
+# stock templates' license/author fields (pyproject.toml, setup.py).
+# packageVersion, the tag normalizer and git ids are passed on the CLI.
+packageName: igvf_catalog_client
+projectName: igvf-catalog-client
+packageUrl: https://github.com/IGVF-DACC/igvf-catalog-python-client
+useOneOfDiscriminatorLookup: true
+licenseInfo: MIT
+infoName: IGVF DACC
+infoEmail: encode-help@lists.stanford.edu

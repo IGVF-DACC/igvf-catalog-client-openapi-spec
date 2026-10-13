@@ -1,0 +1,35 @@
+name: Set up client builder bot
+description: >
+  Mint a catalog-client-builder GitHub App token, use the App's bot user as the
+  git identity and let git authenticate through gh. Steps that push must set
+  GH_TOKEN to the token output.
+inputs:
+  app-id:
+    required: true
+  private-key:
+    required: true
+  repositories:
+    description: Comma-separated IGVF-DACC repositories the token is scoped to
+    required: true
+outputs:
+  token:
+    value: ${{ steps.token.outputs.token }}
+runs:
+  using: composite
+  steps:
+    - id: token
+      uses: actions/create-github-app-token@v1
+      with:
+        app-id: ${{ inputs.app-id }}
+        private-key: ${{ inputs.private-key }}
+        owner: IGVF-DACC
+        repositories: ${{ inputs.repositories }}
+    - shell: bash
+      env:
+        GH_TOKEN: ${{ steps.token.outputs.token }}
+        SLUG: ${{ steps.token.outputs.app-slug }}
+      run: |
+        user_id=$(gh api "/users/${SLUG}[bot]" --jq .id)
+        git config --global user.name "${SLUG}[bot]"
+        git config --global user.email "${user_id}+${SLUG}[bot]@users.noreply.github.com"
+        gh auth setup-git

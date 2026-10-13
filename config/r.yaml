@@ -1,0 +1,7 @@
+# openapi-generator 7.14.0 `-g r` options (see `config-help -g r`).
+# "MIT + file LICENSE" is the form R CMD check expects; the client repo keeps
+# the R license stub in LICENSE and the full text in LICENSE.md.
+packageName: igvfcatalogclient
+licenseInfo: MIT + file LICENSE
+infoName: IGVF DACC
+infoEmail: encode-help@lists.stanford.edu

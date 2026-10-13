@@ -1,0 +1,2102 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "IGVF Catalog",
+    "description": "fixture",
+    "version": "1.3.0"
+  },
+  "servers": [
+    {
+      "url": "https://catalog-api-dev.demo.igvf.org/api"
+    }
+  ],
+  "paths": {
+    "/genes": {
+      "get": {
+        "operationId": "genes",
+        "description": "Retrieve genes.<br>   Example: organism = Homo sapiens, <br>   name = SAMD1, <br>   region = chr1:212565300-212620800, <br>   synonym = CKLF, <br>   collection = ACMG73, <br>   study_set = MorPhiC, <br>   gene_id = ENSG00000187642 (Ensembl ids), <br>   gene_type = protein_coding, <br>   hgnc_id = HGNC:28208, <br>   entrez = ENTREZ:84808. <br>   The limit parameter controls the page size and can not exceed 500. <br>   Pagination is 0-based.",
+        "tags": [
+          "Nodes"
+        ],
+        "parameters": [
+          {
+            "name": "gene_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hgnc_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "entrez",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "region",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "synonym",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "collection",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ACMG73",
+                "GREGoR",
+                "Morphic",
+                "StanfordFCC"
+              ]
+            }
+          },
+          {
+            "name": "study_set",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "16p11.2 Deletion - Shendure",
+                "Blood Master Regulators",
+                "Cardiac - Engreitz",
+                "Cardiac - Munshi",
+                "Cardiac - Quertermous",
+                "Cardiometabolic TFs",
+                "Cardiomyopathies-Steinmetz",
+                "CdLS-like phenotype",
+                "Coronary Artery Disease - Lettre",
+                "DiGeorge Syndrome - Park",
+                "DiGeorge Syndrome - Shendure",
+                "GREGoR Candidate - BCM",
+                "GREGoR Candidate - Broad",
+                "GREGoR Candidate - GSS",
+                "GREGoR Candidate - UW",
+                "IGVFFI6537JARB",
+                "IGVFFI7781XWZY",
+                "LDL-C uptake",
+                "MorPhiC",
+                "Pancreatic differentiation",
+                "Pulmonary arterial hypertension - Rabinovitch",
+                "SGE-Starita",
+                "Strong Selection - Sunyaev",
+                "VAMP-seq",
+                "Williams Syndrome - Park",
+                "Williams Syndrome - Shendure"
+              ]
+            }
+          },
+          {
+            "name": "gene_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "IG_C_gene",
+                "IG_C_pseudogene",
+                "IG_D_gene",
+                "IG_J_gene",
+                "IG_J_pseudogene",
+                "IG_V_gene",
+                "IG_V_pseudogene",
+                "IG_pseudogene",
+                "Mt_rRNA",
+                "Mt_tRNA",
+                "TEC",
+                "TR_C_gene",
+                "TR_D_gene",
+                "TR_J_gene",
+                "TR_J_pseudogene",
+                "TR_V_gene",
+                "TR_V_pseudogene",
+                "artifact",
+                "lncRNA",
+                "miRNA",
+                "misc_RNA",
+                "processed_pseudogene",
+                "protein_coding",
+                "pseudogene",
+                "rRNA",
+                "rRNA_pseudogene",
+                "ribozyme",
+                "sRNA",
+                "scRNA",
+                "scaRNA",
+                "snRNA",
+                "snoRNA",
+                "transcribed_processed_pseudogene",
+                "transcribed_unitary_pseudogene",
+                "transcribed_unprocessed_pseudogene",
+                "translated_processed_pseudogene",
+                "translated_unprocessed_pseudogene",
+                "unitary_pseudogene",
+                "unprocessed_pseudogene",
+                "vault_RNA"
+              ]
+            }
+          },
+          {
+            "name": "organism",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Mus musculus",
+                "Homo sapiens"
+              ],
+              "default": "Homo sapiens"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "chr": {
+                        "type": "string"
+                      },
+                      "start": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "end": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "gene_type": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "strand": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "hgnc": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "entrez": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "collections": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "study_sets": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
+                      "source": {
+                        "type": "string"
+                      },
+                      "version": {
+                        "type": "string"
+                      },
+                      "source_url": {
+                        "type": "string"
+                      },
+                      "synonyms": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "_id",
+                      "chr",
+                      "start",
+                      "end",
+                      "gene_type",
+                      "name",
+                      "source",
+                      "version",
+                      "source_url"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/variants/genes": {
+      "get": {
+        "operationId": "genesFromVariants",
+        "description": "Retrieve variant-gene pairs including eQTLs & splice QTLs from AFGR and eQTL Catalogue, and CRISPR screens from IGVF, by variants.<br>     The following parameters can be used to set thresholds on -log10 p_value: gt (>), gte (>=), lt (<), lte (<=).<br>     posterior_inclusion_probability and log2FC also accept plain numbers (exact match) or the same gt/gte/lt/lte range syntax. significant only accepts true (omit the parameter to not filter on it).<br>     Set verbose = true to retrieve full info on the corresponding variants and genes.<br>     At least one of these properties must be defined: spdi, hgvs, rsid, ca_id, variant_id, region, method, or files_filesets. <br>     The limit parameter controls the page size and can not exceed 500. <br>     Pagination is 0-based. <br> <br>     <div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"eqtl\">eQTL</button> <button class=\"method-example-tab\" data-method-example-tab=\"spliceqtl\">spliceQTL</button> <button class=\"method-example-tab\" data-method-example-tab=\"variant-effects\">Variant-EFFECTS</button> <button class=\"method-example-tab\" data-method-example-tab=\"crispr-screen\">CRISPR screen</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"eqtl\"> <strong>eQTL:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>spdi = NC_000001.11:40241653:TGAA:TGAAATTGAA</li> <li>effect_size = gte:0.3</li> <li>method = eQTL</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>region = chr1:40241650-40241759 (maximum length: 10kb)</li> <li>method = eQTL</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"spliceqtl\"> <strong>spliceQTL:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>spdi = NC_000001.11:898757:AAAAAA:AAAAAAA</li> <li>effect_size = gte:0.3</li> <li>method = spliceQTL</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>region = chr1:898750-898759 (maximum length: 10kb)</li> <li>method = spliceQTL</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"variant-effects\"> <strong>Variant-EFFECTS:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>spdi = NC_000010.11:79347741:AGGT:TCAG</li> <li>effect_size = lt:-0.6</li> <li>method = CRISPR screen</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>region = chr10:79347740-79347749 (maximum length: 10kb)</li> <li>method = CRISPR screen</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"crispr-screen\"> <strong>CRISPR screen:</strong> <div class=\"method-query-example\"> <strong>query by variant identifier</strong>  <ul> <li>spdi = NC_000016.10:28930710:G:A</li> <li>method = CRISPR screen</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by region</strong>  <ul> <li>region = chr16:28930700-28930800 (maximum length: 10kb)</li> <li>method = CRISPR screen</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by significance thresholds</strong>  <ul> <li>region = chr16:28930700-28930800 (maximum length: 10kb)</li> <li>posterior_inclusion_probability = gte:0.1</li> <li>log2FC = lt:-0.5</li> <li>significant = true</li> <li>method = CRISPR screen</li> </ul> </div> </div> </div>",
+        "tags": [
+          "IGVF Data"
+        ],
+        "parameters": [
+          {
+            "name": "spdi",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hgvs",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rsid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ca_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "variant_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "region",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "neg_log10_pvalue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "effect_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "posterior_inclusion_probability",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "log2FC",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "significant",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "biosample_term",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "biological_context",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "eQTL",
+                "spliceQTL",
+                "variant effect on gene expression"
+              ]
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "CRISPR screen",
+                "eQTL",
+                "spliceQTL"
+              ]
+            }
+          },
+          {
+            "name": "files_fileset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "AFGR",
+                "EBI",
+                "IGVF"
+              ]
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "modulates expression of",
+                "modulates splicing of"
+              ]
+            }
+          },
+          {
+            "name": "organism",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Homo sapiens"
+              ],
+              "default": "Homo sapiens"
+            }
+          },
+          {
+            "name": "verbose",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ],
+              "default": "false"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "gene": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "chr": {
+                                "type": "string"
+                              },
+                              "start": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "end": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "gene_type": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "strand": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "hgnc": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "entrez": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "collections": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
+                              "study_sets": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              },
+                              "source_url": {
+                                "type": "string"
+                              },
+                              "synonyms": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "chr",
+                              "start",
+                              "end",
+                              "gene_type",
+                              "name",
+                              "source",
+                              "version",
+                              "source_url"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ],
+                        "nullable": true
+                      },
+                      "sequence_variant": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "chr": {
+                                "type": "string"
+                              },
+                              "pos": {
+                                "type": "number"
+                              },
+                              "rsid": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
+                              "ref": {
+                                "type": "string"
+                              },
+                              "alt": {
+                                "type": "string"
+                              },
+                              "spdi": {
+                                "type": "string"
+                              },
+                              "hgvs": {
+                                "type": "string"
+                              },
+                              "ca_id": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "strain": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
+                              "qual": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "files_filesets": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "annotations": {
+                                "type": "object",
+                                "properties": {
+                                  "bravo_af": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_total": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_afr": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_afr_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_afr_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_ami": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_ami_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_ami_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_amr": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_amr_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_amr_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_asj": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_asj_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_asj_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_eas": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_eas_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_eas_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_fin": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_fin_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_fin_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_nfe": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_nfe_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_nfe_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_oth": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_oth_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_oth_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_sas": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_sas_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_sas_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_raw": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "GENCODE_category": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "funseq_description": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                },
+                                "additionalProperties": false,
+                                "nullable": true
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "source_url": {
+                                "type": "string"
+                              },
+                              "organism": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "chr",
+                              "pos",
+                              "ref",
+                              "alt",
+                              "annotations",
+                              "source",
+                              "source_url",
+                              "organism"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ],
+                        "nullable": true
+                      },
+                      "intron_chr": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "intron_start": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "intron_end": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "effect_size": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "neg_log10_pvalue": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "neg_log10_pvalue_adj": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "log2FC": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "posterior_inclusion_probability": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "coefficient_stddev": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "power": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "significant": {
+                        "type": "boolean",
+                        "nullable": true
+                      },
+                      "standard_error": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "z_score": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "credible_set_min_r2": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "method": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "crispr_modality": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "source": {
+                        "type": "string"
+                      },
+                      "source_url": {
+                        "type": "string"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "p_value": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "chr": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "biological_context": {
+                        "type": "string"
+                      },
+                      "biosample_term": {
+                        "type": "string"
+                      },
+                      "study": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "ancestry_initial": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "ancestry_replication": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "n_cases": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "n_initial": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "n_replication": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "pmid": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "pub_author": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "pub_date": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "pub_journal": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "pub_title": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "has_sumstats": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "num_assoc_loci": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "study_source": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "trait_reported": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "trait_efos": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "trait_category": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "study_type": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "version": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "files_filesets": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "name",
+                              "ancestry_initial",
+                              "ancestry_replication",
+                              "n_cases",
+                              "n_initial",
+                              "n_replication",
+                              "pmid",
+                              "pub_author",
+                              "pub_date",
+                              "pub_journal",
+                              "pub_title",
+                              "has_sumstats",
+                              "num_assoc_loci",
+                              "study_source",
+                              "trait_reported",
+                              "trait_efos",
+                              "trait_category",
+                              "study_type",
+                              "version"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ],
+                        "nullable": true
+                      },
+                      "name": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "class": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "files_filesets": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "gene",
+                      "sequence_variant",
+                      "source",
+                      "source_url",
+                      "label",
+                      "biological_context",
+                      "biosample_term"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/genes/variants": {
+      "get": {
+        "operationId": "variantsFromGenes",
+        "description": "Retrieve variant-gene pairs including eQTLs & splice QTLs from AFGR and eQTL Catalogue, and CRISPR screens from IGVF, by Ensembl gene ids.<br>     The following parameters can be used to set thresholds on -log10 p_value: gt (>), gte (>=), lt (<), lte (<=).<br>     Set verbose = true to retrieve full info on the corresponding variants and genes.<br>     At least one of these properties must be defined: gene_id, hgnc_id, gene_name, region, synonym, method, or files_fileset. <br>     The limit parameter controls the page size and can not exceed 500. <br>     Pagination is 0-based. <br> <br>     <div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"eqtl\">eQTL</button> <button class=\"method-example-tab\" data-method-example-tab=\"spliceqtl\">spliceQTL</button> <button class=\"method-example-tab\" data-method-example-tab=\"variant-effects\">Variant-EFFECTS</button> <button class=\"method-example-tab\" data-method-example-tab=\"crispr-screen\">CRISPR screen</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"eqtl\"> <strong>eQTL:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>gene_id = ENSG00000187642</li> <li>neg_log10_pvalue = gte:24.5</li> <li>method = eQTL</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>synonym = PERM1</li> <li>method = eQTL</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"spliceqtl\"> <strong>spliceQTL:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>gene_id = ENSG00000188976</li> <li>neg_log10_pvalue = gt:45</li> <li>effect_size = gt:0.5</li> <li>method = spliceQTL</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>synonym = NOC2L</li> <li>method = spliceQTL</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"variant-effects\"> <strong>Variant-EFFECTS:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>gene_id = ENSG00000108179</li> <li>neg_log10_pvalue = gt:13.1</li> <li>method = CRISPR screen</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>synonym = PPIF</li> <li>method = CRISPR screen</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"crispr-screen\"> <strong>CRISPR screen:</strong> <div class=\"method-query-example\"> <strong>query by gene identifier</strong>  <ul> <li>gene_id = ENSG00000177455</li> <li>method = CRISPR screen</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by gene name</strong>  <ul> <li>gene_name = CD19</li> <li>method = CRISPR screen</li> </ul> </div> </div> </div>",
+        "tags": [
+          "IGVF Data"
+        ],
+        "parameters": [
+          {
+            "name": "gene_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hgnc_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gene_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "synonym",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "region",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "neg_log10_pvalue",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "effect_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "posterior_inclusion_probability",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "log2FC",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "significant",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "biosample_term",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "biological_context",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "eQTL",
+                "spliceQTL",
+                "variant effect on gene expression"
+              ]
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "CRISPR screen",
+                "eQTL",
+                "spliceQTL"
+              ]
+            }
+          },
+          {
+            "name": "files_fileset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "AFGR",
+                "EBI",
+                "IGVF"
+              ]
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "expression modulated by",
+                "splicing modulated by"
+              ]
+            }
+          },
+          {
+            "name": "organism",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Homo sapiens"
+              ],
+              "default": "Homo sapiens"
+            }
+          },
+          {
+            "name": "verbose",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ],
+              "default": "false"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "gene": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "chr": {
+                                "type": "string"
+                              },
+                              "start": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "end": {
+                                "type": "number",
+                                "nullable": true
+                              },
+                              "gene_type": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "strand": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "hgnc": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "entrez": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "collections": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
+                              "study_sets": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "string"
+                              },
+                              "source_url": {
+                                "type": "string"
+                              },
+                              "synonyms": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "chr",
+                              "start",
+                              "end",
+                              "gene_type",
+                              "name",
+                              "source",
+                              "version",
+                              "source_url"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ],
+                        "nullable": true
+                      },
+                      "sequence_variant": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "chr": {
+                                "type": "string"
+                              },
+                              "pos": {
+                                "type": "number"
+                              },
+                              "rsid": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
+                              "ref": {
+                                "type": "string"
+                              },
+                              "alt": {
+                                "type": "string"
+                              },
+                              "spdi": {
+                                "type": "string"
+                              },
+                              "hgvs": {
+                                "type": "string"
+                              },
+                              "ca_id": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "strain": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
+                              "qual": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "files_filesets": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "annotations": {
+                                "type": "object",
+                                "properties": {
+                                  "bravo_af": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_total": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_afr": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_afr_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_afr_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_ami": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_ami_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_ami_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_amr": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_amr_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_amr_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_asj": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_asj_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_asj_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_eas": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_eas_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_eas_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_fin": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_fin_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_fin_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_nfe": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_nfe_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_nfe_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_oth": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_oth_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_oth_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_sas": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_sas_male": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_sas_female": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "gnomad_af_raw": {
+                                    "type": "number",
+                                    "nullable": true
+                                  },
+                                  "GENCODE_category": {
+                                    "type": "string",
+                                    "nullable": true
+                                  },
+                                  "funseq_description": {
+                                    "type": "string",
+                                    "nullable": true
+                                  }
+                                },
+                                "additionalProperties": false,
+                                "nullable": true
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "source_url": {
+                                "type": "string"
+                              },
+                              "organism": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "chr",
+                              "pos",
+                              "ref",
+                              "alt",
+                              "annotations",
+                              "source",
+                              "source_url",
+                              "organism"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ],
+                        "nullable": true
+                      },
+                      "intron_chr": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "intron_start": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "intron_end": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "effect_size": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "neg_log10_pvalue": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "neg_log10_pvalue_adj": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "log2FC": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "posterior_inclusion_probability": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "coefficient_stddev": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "power": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "significant": {
+                        "type": "boolean",
+                        "nullable": true
+                      },
+                      "standard_error": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "z_score": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "credible_set_min_r2": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "method": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "crispr_modality": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "source": {
+                        "type": "string"
+                      },
+                      "source_url": {
+                        "type": "string"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "p_value": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "chr": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "biological_context": {
+                        "type": "string"
+                      },
+                      "biosample_term": {
+                        "type": "string"
+                      },
+                      "study": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "ancestry_initial": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "ancestry_replication": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "n_cases": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "n_initial": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "n_replication": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "pmid": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "pub_author": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "pub_date": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "pub_journal": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "pub_title": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "has_sumstats": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "num_assoc_loci": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "study_source": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "trait_reported": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "trait_efos": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "trait_category": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "study_type": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "version": {
+                                "type": "string",
+                                "nullable": true
+                              },
+                              "files_filesets": {
+                                "type": "string",
+                                "nullable": true
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "name",
+                              "ancestry_initial",
+                              "ancestry_replication",
+                              "n_cases",
+                              "n_initial",
+                              "n_replication",
+                              "pmid",
+                              "pub_author",
+                              "pub_date",
+                              "pub_journal",
+                              "pub_title",
+                              "has_sumstats",
+                              "num_assoc_loci",
+                              "study_source",
+                              "trait_reported",
+                              "trait_efos",
+                              "trait_category",
+                              "study_type",
+                              "version"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ],
+                        "nullable": true
+                      },
+                      "name": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "class": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "files_filesets": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    },
+                    "required": [
+                      "gene",
+                      "sequence_variant",
+                      "source",
+                      "source_url",
+                      "label",
+                      "biological_context",
+                      "biosample_term"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/llm-query": {
+      "post": {
+        "operationId": "llmQuery",
+        "description": "Ask a question that interests you. This API is password protected.<br>   Set verbose = true to retrieve AQL and AQL results.<br>   Example: query = Tell me about the gene SAMD11.",
+        "tags": [
+          "Utility Endpoints"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "maxLength": 5000
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "verbose": {
+                    "type": "string",
+                    "enum": [
+                      "true",
+                      "false"
+                    ],
+                    "default": "false"
+                  }
+                },
+                "required": [
+                  "query",
+                  "password"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "query": {
+                      "type": "string"
+                    },
+                    "aql": {
+                      "type": "string",
+                      "maxLength": 5000
+                    },
+                    "aql_result": {
+                      "type": "array",
+                      "maxItems": 5
+                    },
+                    "answer": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "query",
+                    "answer"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/autocomplete": {
+      "get": {
+        "operationId": "autocomplete",
+        "description": "Autocomplete names for genes and proteins based on prefix search.<br>   Example: term = TP53, <br>   Pagination is 0-based.",
+        "tags": [
+          "Utility Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "term": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "uri": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "term",
+                      "type",
+                      "name",
+                      "uri"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health",
+        "description": "Health check endpoint for the API service",
+        "tags": [
+          "Utility Endpoints"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Authorization": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "responses": {
+      "error": {
+        "description": "Error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                },
+                "issues": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "message",
+                "code"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Nodes"
+    },
+    {
+      "name": "IGVF Data"
+    },
+    {
+      "name": "Bespoke Endpoints"
+    },
+    {
+      "name": "Biological Context Data"
+    },
+    {
+      "name": "Utility Endpoints"
+    }
+  ],
+  "externalDocs": {
+    "url": "https://api.catalogkg.igvf.org/openapi"
+  }
+}
