@@ -3,7 +3,7 @@
   "info": {
     "title": "IGVF Catalog",
     "description": "IGVF Catalog OpenAPI compliant REST API built using tRPC with Express.\n\nOur database uses 0-based, half-open coordinates for genomic coordinates in the GRCh38 (human) and GRCm39 (mouse) reference genomes.\n\nData is licensed under the <a href=https://creativecommons.org/licenses/by/4.0/ target=\"_blank\">Creative Commons license</a> and the software is licensed under the <a href=https://spdx.org/licenses/MIT.html target=\"_blank\">MIT license</a>.",
-    "version": "1.3.1.dev20261015220434"
+    "version": "1.3.1.dev20261019194131"
   },
   "servers": [
     {
@@ -6430,6 +6430,256 @@
                   "items": {
                     "$ref": "#/components/schemas/QtlSummaryEndpoint"
                   }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/genes/genomic-elements/score-summary": {
+      "get": {
+        "operationId": "genesGenomicElementsScoreSummary",
+        "description": "Observed min/max and counts for a score field across every genomic-element-to-gene edge for one gene - without paginating through the edges themselves.<br>     Optional filters are combined with and matched exactly.<br>     Results are grouped by every distinct combination of those fields plus crispr_modality, so     measurements from incompatible sources are never pooled. Groups with no numeric scores are omitted, and total_edge_count     only counts edges with a numeric score.<br>     Default page size is 25, maximum 500; pagination is     0-based.<br><br><div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"crispr-screen\">CRISPR screen</button> <button class=\"method-example-tab\" data-method-example-tab=\"perturb-seq\">Perturb-seq</button> <button class=\"method-example-tab\" data-method-example-tab=\"encode-re2g\">ENCODE-rE2G</button> <button class=\"method-example-tab\" data-method-example-tab=\"sce2g\">scE2G</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"crispr-screen\"> <strong>CRISPR screen:</strong> <div class=\"method-query-example\"> <strong>Element effect sizes on a CRISPR screen target gene</strong>  <ul> <li>gene_id = ENSG00000102145</li> <li>score_field = effect_size</li> <li>method = CRISPR screen</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"perturb-seq\"> <strong>Perturb-seq:</strong> <div class=\"method-query-example\"> <strong>Perturb-seq significance distribution for a gene</strong>  <ul> <li>gene_id = ENSG00000108179</li> <li>score_field = neg_log10_pvalue</li> <li>method = Perturb-seq</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"encode-re2g\"> <strong>ENCODE-rE2G:</strong> <div class=\"method-query-example\"> <strong>ENCODE-rE2G prediction scores for a gene</strong>  <ul> <li>gene_id = ENSG00000108179</li> <li>score_field = score</li> <li>method = ENCODE-rE2G</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"sce2g\"> <strong>scE2G:</strong> <div class=\"method-query-example\"> <strong>scE2G prediction scores for a gene</strong>  <ul> <li>gene_id = ENSG00000108179</li> <li>score_field = score</li> <li>method = scE2G</li> </ul> </div> </div> </div>",
+        "tags": [
+          "Bespoke Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "gene_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "score_field",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "score",
+                "log2FC",
+                "effect_size",
+                "z_score",
+                "t_score",
+                "idr",
+                "neg_log10_pvalue",
+                "neg_log10_pvalue_adj"
+              ]
+            }
+          },
+          {
+            "name": "method",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "CRISPR screen",
+                "ENCODE-rE2G",
+                "Perturb-seq",
+                "scE2G"
+              ]
+            }
+          },
+          {
+            "name": "files_fileset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ENCODE",
+                "IGVF"
+              ]
+            }
+          },
+          {
+            "name": "biosample_term",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "biological_context",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cell_annotation",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cell_annotation_term",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenesGenomicElementsScoreSummary"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/error"
+          }
+        }
+      }
+    },
+    "/genes/variants/score-summary": {
+      "get": {
+        "operationId": "genesVariantsScoreSummary",
+        "description": "Observed min/max and counts for a score field across every IGVF CRISPR screen variant-to-gene edge for one gene - without paginating through the edges themselves. Always restricted to method = \"CRISPR screen\" and label = \"variant effect on gene expression\", so QTL records sharing the variants_genes collection (AFGR eQTL/spliceQTL, EBI eQTL Catalog) are excluded.<br>     Optional filters are     combined with and matched exactly. Perturbation filters the stored crispr_modality field.<br>     Results are grouped by every distinct combination of those fields, so measurements from     incompatible sources are never pooled.     Groups with no numeric scores are omitted, and total_edge_count only counts edges with a     numeric score.<br>     Default page size is 25, maximum 500; pagination is     0-based.<br><br><div class=\"method-examples\"> <strong>Examples by perturbation</strong> <p class=\"method-example-description\">These examples are grouped by CRISPR perturbation type; use the <code>perturbation</code> filter to return data from a specific modality.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"prime-editing\">Prime editing</button> <button class=\"method-example-tab\" data-method-example-tab=\"base-editing\">Base editing</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"prime-editing\"> <strong>Prime editing:</strong> <div class=\"method-query-example\"> <strong>Effect size distribution for a prime-edited gene</strong>  <ul> <li>gene_id = ENSG00000108179</li> <li>score_field = effect_size</li> <li>perturbation = prime editing</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"base-editing\"> <strong>Base editing:</strong> <div class=\"method-query-example\"> <strong>Effect size distribution for a base-edited gene</strong>  <ul> <li>gene_id = ENSG00000177455</li> <li>score_field = effect_size</li> <li>perturbation = base editing</li> </ul> </div> </div> </div>",
+        "tags": [
+          "Bespoke Endpoints"
+        ],
+        "parameters": [
+          {
+            "name": "gene_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "score_field",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "effect_size",
+                "log2FC",
+                "neg_log10_pvalue",
+                "neg_log10_pvalue_adj",
+                "power",
+                "posterior_inclusion_probability",
+                "coefficient_stddev"
+              ]
+            }
+          },
+          {
+            "name": "files_fileset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "IGVF"
+              ]
+            }
+          },
+          {
+            "name": "biosample_term",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "biological_context",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "perturbation",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "base editing",
+                "prime editing"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenesVariantsScoreSummary"
                 }
               }
             }
@@ -13309,6 +13559,43 @@
         ],
         "additionalProperties": false
       },
+      "GenesGenomicElementsScoreSummary": {
+        "type": "object",
+        "properties": {
+          "gene_id": {
+            "type": "string"
+          },
+          "score_field": {
+            "type": "string",
+            "enum": [
+              "score",
+              "log2FC",
+              "effect_size",
+              "z_score",
+              "t_score",
+              "idr",
+              "neg_log10_pvalue",
+              "neg_log10_pvalue_adj"
+            ]
+          },
+          "total_edge_count": {
+            "type": "number"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Groups"
+            }
+          }
+        },
+        "required": [
+          "gene_id",
+          "score_field",
+          "total_edge_count",
+          "groups"
+        ],
+        "additionalProperties": false
+      },
       "GenesProteinsFromVariants": {
         "type": "object",
         "properties": {
@@ -13562,6 +13849,42 @@
           "files_filesets",
           "biological_context",
           "biosample_term"
+        ],
+        "additionalProperties": false
+      },
+      "GenesVariantsScoreSummary": {
+        "type": "object",
+        "properties": {
+          "gene_id": {
+            "type": "string"
+          },
+          "score_field": {
+            "type": "string",
+            "enum": [
+              "effect_size",
+              "log2FC",
+              "neg_log10_pvalue",
+              "neg_log10_pvalue_adj",
+              "power",
+              "posterior_inclusion_probability",
+              "coefficient_stddev"
+            ]
+          },
+          "total_edge_count": {
+            "type": "number"
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Groups13"
+            }
+          }
+        },
+        "required": [
+          "gene_id",
+          "score_field",
+          "total_edge_count",
+          "groups"
         ],
         "additionalProperties": false
       },
@@ -14233,6 +14556,152 @@
           "source",
           "biological_context",
           "files_filesets"
+        ],
+        "additionalProperties": false
+      },
+      "Groups": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "nullable": true
+          },
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "files_filesets": {
+            "type": "string",
+            "nullable": true
+          },
+          "biosample_term": {
+            "type": "string",
+            "nullable": true
+          },
+          "biological_context": {
+            "type": "string",
+            "nullable": true
+          },
+          "cell_annotation": {
+            "type": "string",
+            "nullable": true
+          },
+          "cell_annotation_term": {
+            "type": "string",
+            "nullable": true
+          },
+          "crispr_modality": {
+            "type": "string",
+            "nullable": true
+          },
+          "min": {
+            "type": "number",
+            "nullable": true
+          },
+          "max": {
+            "type": "number",
+            "nullable": true
+          },
+          "edge_count": {
+            "type": "number"
+          },
+          "numeric_count": {
+            "type": "number"
+          },
+          "missing_count": {
+            "type": "number"
+          },
+          "invalid_count": {
+            "type": "number"
+          },
+          "zero_count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "method",
+          "source",
+          "files_filesets",
+          "biosample_term",
+          "biological_context",
+          "cell_annotation",
+          "cell_annotation_term",
+          "crispr_modality",
+          "min",
+          "max",
+          "edge_count",
+          "numeric_count",
+          "missing_count",
+          "invalid_count",
+          "zero_count"
+        ],
+        "additionalProperties": false
+      },
+      "Groups13": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "nullable": true
+          },
+          "source": {
+            "type": "string",
+            "nullable": true
+          },
+          "files_filesets": {
+            "type": "string",
+            "nullable": true
+          },
+          "biosample_term": {
+            "type": "string",
+            "nullable": true
+          },
+          "biological_context": {
+            "type": "string",
+            "nullable": true
+          },
+          "perturbation": {
+            "type": "string",
+            "nullable": true
+          },
+          "min": {
+            "type": "number",
+            "nullable": true
+          },
+          "max": {
+            "type": "number",
+            "nullable": true
+          },
+          "edge_count": {
+            "type": "number"
+          },
+          "numeric_count": {
+            "type": "number"
+          },
+          "missing_count": {
+            "type": "number"
+          },
+          "invalid_count": {
+            "type": "number"
+          },
+          "zero_count": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "method",
+          "source",
+          "files_filesets",
+          "biosample_term",
+          "biological_context",
+          "perturbation",
+          "min",
+          "max",
+          "edge_count",
+          "numeric_count",
+          "missing_count",
+          "invalid_count",
+          "zero_count"
         ],
         "additionalProperties": false
       },
