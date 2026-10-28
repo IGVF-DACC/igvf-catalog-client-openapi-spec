@@ -3,7 +3,7 @@
   "info": {
     "title": "IGVF Catalog",
     "description": "IGVF Catalog OpenAPI compliant REST API built using tRPC with Express.\n\nOur database uses 0-based, half-open coordinates for genomic coordinates in the GRCh38 (human) and GRCm39 (mouse) reference genomes.\n\nData is licensed under the <a href=https://creativecommons.org/licenses/by/4.0/ target=\"_blank\">Creative Commons license</a> and the software is licensed under the <a href=https://spdx.org/licenses/MIT.html target=\"_blank\">MIT license</a>.",
-    "version": "1.3.1.dev20261024235104"
+    "version": "1.3.1.dev20261028211035"
   },
   "servers": [
     {
@@ -7779,7 +7779,7 @@
     "/phenotypes/coding-variants": {
       "get": {
         "operationId": "codingVariantsFromPhenotypes",
-        "description": "Retrieve coding variants associated with the query phenotype.<br>     The limit parameter controls the page size and can not exceed 100. <br>     Pagination is 0-based. <br> <br>     <div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"dual-ipa\">DUAL-IPA</button> <button class=\"method-example-tab\" data-method-example-tab=\"esm-1v\">ESM-1v</button> <button class=\"method-example-tab\" data-method-example-tab=\"mutpred2\">MutPred2</button> <button class=\"method-example-tab\" data-method-example-tab=\"sge\">SGE</button> <button class=\"method-example-tab\" data-method-example-tab=\"vamp-seq\">VAMP-seq</button> <button class=\"method-example-tab\" data-method-example-tab=\"variant-painting\">Variant painting via fluorescence</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"dual-ipa\"> <strong>DUAL-IPA:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = BAO_0040014</li> <li>method = DUAL-IPA</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI6224HZMG</li> <li>method = DUAL-IPA</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"esm-1v\"> <strong>ESM-1v:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = GO_0003674</li> <li>method = ESM-1v</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI8105TNNO</li> <li>method = ESM-1v</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"mutpred2\"> <strong>MutPred2:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = GO_0003674</li> <li>method = MutPred2</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI6893ZOAA</li> <li>method = MutPred2</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"sge\"> <strong>SGE:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = NCIT_C16407</li> <li>method = SGE</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI2810SLAX</li> <li>method = SGE</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"vamp-seq\"> <strong>VAMP-seq:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = OBA_0000128</li> <li>method = VAMP-seq</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI0629IIQU</li> <li>method = VAMP-seq</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"variant-painting\"> <strong>Variant painting via fluorescence:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = GO_0008104</li> <li>method = Variant painting via fluorescence</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI9499PJFU</li> <li>method = Variant painting via fluorescence</li> </ul> </div> </div> </div>",
+        "description": "Retrieve coding variants associated with the query phenotype.<br>     For MutPred2 results, the molecular mechanisms it predicts the substitution to disrupt are returned in property_scores. <br>     The limit parameter controls the page size and can not exceed 100. <br>     Pagination is 0-based. <br> <br>     <div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"dual-ipa\">DUAL-IPA</button> <button class=\"method-example-tab\" data-method-example-tab=\"esm-1v\">ESM-1v</button> <button class=\"method-example-tab\" data-method-example-tab=\"mutpred2\">MutPred2</button> <button class=\"method-example-tab\" data-method-example-tab=\"sge\">SGE</button> <button class=\"method-example-tab\" data-method-example-tab=\"vamp-seq\">VAMP-seq</button> <button class=\"method-example-tab\" data-method-example-tab=\"variant-painting\">Variant painting via fluorescence</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"dual-ipa\"> <strong>DUAL-IPA:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = BAO_0040014</li> <li>method = DUAL-IPA</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI6224HZMG</li> <li>method = DUAL-IPA</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"esm-1v\"> <strong>ESM-1v:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = GO_0003674</li> <li>method = ESM-1v</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI8105TNNO</li> <li>method = ESM-1v</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"mutpred2\"> <strong>MutPred2:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = GO_0003674</li> <li>method = MutPred2</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI6893ZOAA</li> <li>method = MutPred2</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"sge\"> <strong>SGE:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = NCIT_C16407</li> <li>method = SGE</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI2810SLAX</li> <li>method = SGE</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"vamp-seq\"> <strong>VAMP-seq:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = OBA_0000128</li> <li>method = VAMP-seq</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI0629IIQU</li> <li>method = VAMP-seq</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"variant-painting\"> <strong>Variant painting via fluorescence:</strong> <div class=\"method-query-example\"> <strong>query by phenotype identifier</strong>  <ul> <li>phenotype_id = GO_0008104</li> <li>method = Variant painting via fluorescence</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by files_fileset</strong> <p class=\"method-query-example-note\">Each files_fileset maps to at most one method, so a <code>method</code> filter is usually not necessary.</p> <ul> <li>files_fileset = IGVFFI9499PJFU</li> <li>method = Variant painting via fluorescence</li> </ul> </div> </div> </div>",
         "tags": [
           "IGVF Data"
         ],
@@ -7908,6 +7908,43 @@
                       },
                       "score": {
                         "type": "number",
+                        "nullable": true
+                      },
+                      "property_scores": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "property": {
+                              "type": "string"
+                            },
+                            "posterior_probability": {
+                              "type": "number"
+                            },
+                            "p_value": {
+                              "type": "number"
+                            },
+                            "affected_position": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Loss",
+                                "Gain",
+                                "Altered"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "property",
+                            "posterior_probability",
+                            "p_value",
+                            "affected_position",
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
                         "nullable": true
                       },
                       "method": {
@@ -12103,7 +12140,7 @@
     "/coding-variants/phenotypes": {
       "get": {
         "operationId": "phenotypesFromCodingVariants",
-        "description": "Retrieve phenotypes associated with the query coding variant.<br>     At least one of these fields is required: coding_variant_name, hgvsp, uniprot_name, gene_name, amino_acid_position, transcript_id, method, files_fileset. <br>     The limit parameter controls the page size and can not exceed 100. <br>     Pagination is 0-based. <br> <br>     <div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"dual-ipa\">DUAL-IPA</button> <button class=\"method-example-tab\" data-method-example-tab=\"esm-1v\">ESM-1v</button> <button class=\"method-example-tab\" data-method-example-tab=\"mutpred2\">MutPred2</button> <button class=\"method-example-tab\" data-method-example-tab=\"sge\">SGE</button> <button class=\"method-example-tab\" data-method-example-tab=\"vamp-seq\">VAMP-seq</button> <button class=\"method-example-tab\" data-method-example-tab=\"variant-painting\">Variant painting via fluorescence</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"dual-ipa\"> <strong>DUAL-IPA:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = ACSF3_ENST00000317447_p.Ala17Pro_c.49G-C</li> <li>method = DUAL-IPA</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = ACSF3</li> <li>method = DUAL-IPA</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"esm-1v\"> <strong>ESM-1v:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = A1BG_ENST00000263100_p.Ala118Asn_c.352_353delinsAA</li> <li>method = ESM-1v</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = A1BG</li> <li>method = ESM-1v</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"mutpred2\"> <strong>MutPred2:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = A1BG_ENST00000263100_p.Ala118Arg_c.352_353delinsCG</li> <li>method = MutPred2</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = A1BG</li> <li>method = MutPred2</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"sge\"> <strong>SGE:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = BRCA2_ENST00000380152__NC_000013.11:g.32319075A-C_splicing</li> <li>method = SGE</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = BRCA2</li> <li>method = SGE</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"vamp-seq\"> <strong>VAMP-seq:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = CYP2C19_ENST00000371321_p.Ala103=_c.309T-G</li> <li>method = VAMP-seq</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = CYP2C19</li> <li>method = VAMP-seq</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"variant-painting\"> <strong>Variant painting via fluorescence:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = LITAF_ENST00000622633_p.Pro135Thr_c.403C-A</li> <li>method = Variant painting via fluorescence</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = LITAF</li> <li>method = Variant painting via fluorescence</li> </ul> </div> </div> </div>",
+        "description": "Retrieve phenotypes associated with the query coding variant.<br>     At least one of these fields is required: coding_variant_name, hgvsp, uniprot_name, gene_name, amino_acid_position, transcript_id, method, files_fileset. <br>     For MutPred2 results, the molecular mechanisms it predicts the substitution to disrupt are returned in property_scores. <br>     The limit parameter controls the page size and can not exceed 100. <br>     Pagination is 0-based. <br> <br>     <div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"dual-ipa\">DUAL-IPA</button> <button class=\"method-example-tab\" data-method-example-tab=\"esm-1v\">ESM-1v</button> <button class=\"method-example-tab\" data-method-example-tab=\"mutpred2\">MutPred2</button> <button class=\"method-example-tab\" data-method-example-tab=\"sge\">SGE</button> <button class=\"method-example-tab\" data-method-example-tab=\"vamp-seq\">VAMP-seq</button> <button class=\"method-example-tab\" data-method-example-tab=\"variant-painting\">Variant painting via fluorescence</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"dual-ipa\"> <strong>DUAL-IPA:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = ACSF3_ENST00000317447_p.Ala17Pro_c.49G-C</li> <li>method = DUAL-IPA</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = ACSF3</li> <li>method = DUAL-IPA</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"esm-1v\"> <strong>ESM-1v:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = A1BG_ENST00000263100_p.Ala118Asn_c.352_353delinsAA</li> <li>method = ESM-1v</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = A1BG</li> <li>method = ESM-1v</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"mutpred2\"> <strong>MutPred2:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = A1BG_ENST00000263100_p.Ala118Arg_c.352_353delinsCG</li> <li>method = MutPred2</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = A1BG</li> <li>method = MutPred2</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"sge\"> <strong>SGE:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = BRCA2_ENST00000380152__NC_000013.11:g.32319075A-C_splicing</li> <li>method = SGE</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = BRCA2</li> <li>method = SGE</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"vamp-seq\"> <strong>VAMP-seq:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = CYP2C19_ENST00000371321_p.Ala103=_c.309T-G</li> <li>method = VAMP-seq</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = CYP2C19</li> <li>method = VAMP-seq</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"variant-painting\"> <strong>Variant painting via fluorescence:</strong> <div class=\"method-query-example\"> <strong>Single result</strong>  <ul> <li>coding_variant_name = LITAF_ENST00000622633_p.Pro135Thr_c.403C-A</li> <li>method = Variant painting via fluorescence</li> </ul> </div> <div class=\"method-query-example\"> <strong>Group results</strong>  <ul> <li>gene_name = LITAF</li> <li>method = Variant painting via fluorescence</li> </ul> </div> </div> </div>",
         "tags": [
           "IGVF Data"
         ],
@@ -12264,6 +12301,43 @@
                       },
                       "score": {
                         "type": "number",
+                        "nullable": true
+                      },
+                      "property_scores": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "property": {
+                              "type": "string"
+                            },
+                            "posterior_probability": {
+                              "type": "number"
+                            },
+                            "p_value": {
+                              "type": "number"
+                            },
+                            "affected_position": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "Loss",
+                                "Gain",
+                                "Altered"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "property",
+                            "posterior_probability",
+                            "p_value",
+                            "affected_position",
+                            "type"
+                          ],
+                          "additionalProperties": false
+                        },
                         "nullable": true
                       },
                       "method": {
