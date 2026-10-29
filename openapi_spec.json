@@ -3,7 +3,7 @@
   "info": {
     "title": "IGVF Catalog",
     "description": "IGVF Catalog OpenAPI compliant REST API built using tRPC with Express.\n\nOur database uses 0-based, half-open coordinates for genomic coordinates in the GRCh38 (human) and GRCm39 (mouse) reference genomes.\n\nData is licensed under the <a href=https://creativecommons.org/licenses/by/4.0/ target=\"_blank\">Creative Commons license</a> and the software is licensed under the <a href=https://spdx.org/licenses/MIT.html target=\"_blank\">MIT license</a>.",
-    "version": "1.3.1.dev20261028211035"
+    "version": "1.3.1.dev20261029002350"
   },
   "servers": [
     {
@@ -4979,7 +4979,7 @@
     "/variants/biosamples": {
       "get": {
         "operationId": "biosamplesFromVariants",
-        "description": "Retrieve data from STARR-seq, BlueSTARR, and MPRA for a given variant. Set organism = Mus musculus for mouse MPRA sequences (GRCm39); the default is Homo sapiens (GRCh38).<br>     At least one of these fields is required: variant_id, spdi, hgvs, rsid, ca_id, region, method, or files_fileset. <br>     The limit parameter controls the page size and can not exceed 100. <br>     Pagination is 0-based. <br> <br>     <div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"mpra\">MPRA</button> <button class=\"method-example-tab\" data-method-example-tab=\"starr-seq\">STARR-seq</button> <button class=\"method-example-tab\" data-method-example-tab=\"bluestarr\">BlueSTARR</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"mpra\"> <strong>MPRA:</strong> <div class=\"method-query-example\"> <strong>human MPRA by variant identifier</strong>  <ul> <li>organism = Homo sapiens</li> <li>spdi = NC_000001.11:1000161:C:A</li> <li>method = MPRA</li> </ul> </div> <div class=\"method-query-example\"> <strong>human MPRA by region</strong>  <ul> <li>organism = Homo sapiens</li> <li>region = chr1:1000160-1000163 (maximum length: 10kb)</li> <li>method = MPRA</li> </ul> </div> <div class=\"method-query-example\"> <strong>mouse MPRA by variant identifier</strong>  <ul> <li>organism = Mus musculus</li> <li>spdi = NC_000077.7:55319687:T:C</li> <li>files_fileset = IGVFFI5939ZOZQ</li> <li>method = MPRA</li> <li>verbose = true</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"starr-seq\"> <strong>STARR-seq:</strong> <div class=\"method-query-example\"> <strong>query by variant identifier</strong>  <ul> <li>spdi = NC_000001.11:14772:C:T</li> <li>method = STARR-seq</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by region</strong>  <ul> <li>region = chr1:14771-14775 (maximum length: 10kb)</li> <li>method = STARR-seq</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"bluestarr\"> <strong>BlueSTARR:</strong> <div class=\"method-query-example\"> <strong>query by variant identifier</strong>  <ul> <li>spdi = NC_000001.11:100003415:C:A</li> <li>method = BlueSTARR</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by region</strong>  <ul> <li>region = chr1:100003414-100003418 (maximum length: 10kb)</li> <li>method = BlueSTARR</li> </ul> </div> </div> </div>",
+        "description": "Retrieve data from STARR-seq, BlueSTARR, MPRA, and ColocBoost for a given variant. Set organism = Mus musculus for mouse MPRA sequences (GRCm39); the default is Homo sapiens (GRCh38).<br>     At least one of these fields is required: variant_id, spdi, hgvs, rsid, ca_id, region, method, or files_fileset. <br>     The limit parameter controls the page size and can not exceed 100. <br>     Pagination is 0-based. <br> <br>     <div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"mpra\">MPRA</button> <button class=\"method-example-tab\" data-method-example-tab=\"starr-seq\">STARR-seq</button> <button class=\"method-example-tab\" data-method-example-tab=\"bluestarr\">BlueSTARR</button> <button class=\"method-example-tab\" data-method-example-tab=\"colocboost\">ColocBoost</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"mpra\"> <strong>MPRA:</strong> <div class=\"method-query-example\"> <strong>human MPRA by variant identifier</strong>  <ul> <li>organism = Homo sapiens</li> <li>spdi = NC_000001.11:1000161:C:A</li> <li>method = MPRA</li> </ul> </div> <div class=\"method-query-example\"> <strong>human MPRA by region</strong>  <ul> <li>organism = Homo sapiens</li> <li>region = chr1:1000160-1000163 (maximum length: 10kb)</li> <li>method = MPRA</li> </ul> </div> <div class=\"method-query-example\"> <strong>mouse MPRA by variant identifier</strong>  <ul> <li>organism = Mus musculus</li> <li>spdi = NC_000077.7:55319687:T:C</li> <li>files_fileset = IGVFFI5939ZOZQ</li> <li>method = MPRA</li> <li>verbose = true</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"starr-seq\"> <strong>STARR-seq:</strong> <div class=\"method-query-example\"> <strong>query by variant identifier</strong>  <ul> <li>spdi = NC_000001.11:14772:C:T</li> <li>method = STARR-seq</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by region</strong>  <ul> <li>region = chr1:14771-14775 (maximum length: 10kb)</li> <li>method = STARR-seq</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"bluestarr\"> <strong>BlueSTARR:</strong> <div class=\"method-query-example\"> <strong>query by variant identifier</strong>  <ul> <li>spdi = NC_000001.11:100003415:C:A</li> <li>method = BlueSTARR</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by region</strong>  <ul> <li>region = chr1:100003414-100003418 (maximum length: 10kb)</li> <li>method = BlueSTARR</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"colocboost\"> <strong>ColocBoost:</strong> <div class=\"method-query-example\"> <strong>query by variant identifier</strong>  <ul> <li>spdi = NC_000001.11:155904168:A:G</li> <li>method = ColocBoost</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by variant identifier and gene (gene_name also accepted, e.g. gene_name = RIT1)</strong>  <ul> <li>spdi = NC_000001.11:155904168:A:G</li> <li>method = ColocBoost</li> <li>gene_id = ENSG00000143622</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by variant identifier and phenotype (phenotype_name also accepted, e.g. phenotype_name = type 2 diabetes nephropathy)</strong>  <ul> <li>spdi = NC_000001.11:155904168:A:G</li> <li>method = ColocBoost</li> <li>phenotype_id = EFO_0004997</li> </ul> </div> </div> </div>",
         "tags": [
           "IGVF Data"
         ],
@@ -5048,6 +5048,7 @@
               "type": "string",
               "enum": [
                 "BlueSTARR",
+                "ColocBoost",
                 "MPRA",
                 "STARR-seq"
               ]
@@ -5071,6 +5072,38 @@
                 "true",
                 "false"
               ]
+            }
+          },
+          {
+            "name": "gene_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gene_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phenotype_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phenotype_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -5514,6 +5547,22 @@
                       },
                       "neg_log10_pvalue_adj": {
                         "type": "number",
+                        "nullable": true
+                      },
+                      "phenotype": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "VCP": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "gene": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "phenotype_name": {
+                        "type": "string",
                         "nullable": true
                       },
                       "label": {
@@ -12430,7 +12479,7 @@
     "/biosamples/variants": {
       "get": {
         "operationId": "variantsFromBiosamples",
-        "description": "Retrieve data from STARR-seq, BlueSTARR, and MPRA for a given biosample. Set organism = Mus musculus for mouse MPRA sequences (GRCm39); the default is Homo sapiens (GRCh38).<br>     At least one of these fields is required: biosample_id or biosample_name. <br>     The limit parameter controls the page size and can not exceed 100. <br>     Pagination is 0-based. <br> <br>     <div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"mpra\">MPRA</button> <button class=\"method-example-tab\" data-method-example-tab=\"starr-seq\">STARR-seq</button> <button class=\"method-example-tab\" data-method-example-tab=\"bluestarr\">BlueSTARR</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"mpra\"> <strong>MPRA:</strong> <div class=\"method-query-example\"> <strong>human MPRA by biosample identifier</strong>  <ul> <li>organism = Homo sapiens</li> <li>biosample_id = EFO_0001182</li> <li>method = MPRA</li> <li>element_id = MPRA_chr1_1000079_1000279_GRCh38_plus_IGVFFI7321WGMD</li> <li>significant = true</li> </ul> </div> <div class=\"method-query-example\"> <strong>mouse MPRA by biosample identifier</strong>  <ul> <li>organism = Mus musculus</li> <li>biosample_id = CLO_0008675</li> <li>files_fileset = IGVFFI5939ZOZQ</li> <li>method = MPRA</li> <li>verbose = true</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"starr-seq\"> <strong>STARR-seq:</strong> <div class=\"method-query-example\"> <strong>query by biosample identifier</strong>  <ul> <li>biosample_id = EFO_0002067</li> <li>method = STARR-seq</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"bluestarr\"> <strong>BlueSTARR:</strong> <div class=\"method-query-example\"> <strong>query by biosample identifier</strong>  <ul> <li>biosample_id = EFO_0002067</li> <li>method = BlueSTARR</li> </ul> </div> </div> </div>",
+        "description": "Retrieve data from STARR-seq, BlueSTARR, MPRA, and ColocBoost for a given biosample. Set organism = Mus musculus for mouse MPRA sequences (GRCm39); the default is Homo sapiens (GRCh38).<br>     At least one of these fields is required: biosample_id or biosample_name. <br>     The limit parameter controls the page size and can not exceed 100. <br>     Pagination is 0-based. <br> <br>     <div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"mpra\">MPRA</button> <button class=\"method-example-tab\" data-method-example-tab=\"starr-seq\">STARR-seq</button> <button class=\"method-example-tab\" data-method-example-tab=\"bluestarr\">BlueSTARR</button> <button class=\"method-example-tab\" data-method-example-tab=\"colocboost\">ColocBoost</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"mpra\"> <strong>MPRA:</strong> <div class=\"method-query-example\"> <strong>human MPRA by biosample identifier</strong>  <ul> <li>organism = Homo sapiens</li> <li>biosample_id = EFO_0001182</li> <li>method = MPRA</li> <li>element_id = MPRA_chr1_1000079_1000279_GRCh38_plus_IGVFFI7321WGMD</li> <li>significant = true</li> </ul> </div> <div class=\"method-query-example\"> <strong>mouse MPRA by biosample identifier</strong>  <ul> <li>organism = Mus musculus</li> <li>biosample_id = CLO_0008675</li> <li>files_fileset = IGVFFI5939ZOZQ</li> <li>method = MPRA</li> <li>verbose = true</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"starr-seq\"> <strong>STARR-seq:</strong> <div class=\"method-query-example\"> <strong>query by biosample identifier</strong>  <ul> <li>biosample_id = EFO_0002067</li> <li>method = STARR-seq</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"bluestarr\"> <strong>BlueSTARR:</strong> <div class=\"method-query-example\"> <strong>query by biosample identifier</strong>  <ul> <li>biosample_id = EFO_0002067</li> <li>method = BlueSTARR</li> </ul> </div> </div> <div class=\"method-example-panel\" data-method-example-panel=\"colocboost\"> <strong>ColocBoost:</strong> <div class=\"method-query-example\"> <strong>query by biosample identifier</strong>  <ul> <li>biosample_id = UBERON_0001225</li> <li>method = ColocBoost</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by biosample identifier and gene (gene_name also accepted, e.g. gene_name = UBIAD1)</strong>  <ul> <li>biosample_id = UBERON_0001225</li> <li>method = ColocBoost</li> <li>gene_id = ENSG00000120942</li> </ul> </div> <div class=\"method-query-example\"> <strong>query by biosample identifier and phenotype (phenotype_name also accepted, e.g. phenotype_name = c-reactive protein measurement)</strong>  <ul> <li>biosample_id = UBERON_0001225</li> <li>method = ColocBoost</li> <li>phenotype_id = EFO_0004458</li> </ul> </div> </div> </div>",
         "tags": [
           "IGVF Data"
         ],
@@ -12467,6 +12516,7 @@
               "type": "string",
               "enum": [
                 "BlueSTARR",
+                "ColocBoost",
                 "MPRA",
                 "STARR-seq"
               ]
@@ -12490,6 +12540,38 @@
                 "true",
                 "false"
               ]
+            }
+          },
+          {
+            "name": "gene_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gene_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phenotype_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "phenotype_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           },
           {
@@ -12933,6 +13015,22 @@
                       },
                       "neg_log10_pvalue_adj": {
                         "type": "number",
+                        "nullable": true
+                      },
+                      "phenotype": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "VCP": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "gene": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "phenotype_name": {
+                        "type": "string",
                         "nullable": true
                       },
                       "label": {
@@ -26695,6 +26793,7 @@
                 "COXPRESdb",
                 "CRISPR screen",
                 "ClinGen",
+                "ColocBoost",
                 "DUAL-IPA",
                 "DepMap",
                 "ENCODE-rE2G",
@@ -26792,6 +26891,7 @@
                 "CRISPR-SURF",
                 "CRISPResso2",
                 "Cell Profiler",
+                "ColocBoost",
                 "Cooler",
                 "CountESS",
                 "DESeq2",
