@@ -3,7 +3,7 @@
   "info": {
     "title": "IGVF Catalog",
     "description": "IGVF Catalog OpenAPI compliant REST API built using tRPC with Express.\n\nOur database uses 0-based, half-open coordinates for genomic coordinates in the GRCh38 (human) and GRCm39 (mouse) reference genomes.\n\nData is licensed under the <a href=https://creativecommons.org/licenses/by/4.0/ target=\"_blank\">Creative Commons license</a> and the software is licensed under the <a href=https://spdx.org/licenses/MIT.html target=\"_blank\">MIT license</a>.",
-    "version": "1.3.1.dev20261029063500"
+    "version": "1.3.1.dev20261029225042"
   },
   "servers": [
     {
@@ -8087,7 +8087,7 @@
     "/phenotypes/genomic-elements": {
       "get": {
         "operationId": "genomicElementsFromPhenotypes",
-        "description": "Retrieve genomic elements associated with phenotypes.<br>     At least one of these properties must be defined: phenotype_id, phenotype_name, files_fileset, or method. <br>     Set significant = true to return only significant associations.<br>     Set verbose = true to retrieve full info on the genomic element.<br>     Example: phenotype_id = GO_0008283, <br>     phenotype_name = cell population proliferation, <br>     method = CRISPR screen, <br>     significant = true, <br>     files_fileset = IGVFFI9584UDAS. <br>     The limit parameter controls the page size and can not exceed 500. <br>     Pagination is 0-based.",
+        "description": "Retrieve genomic elements associated with cell migration or cell population proliferation.<br>     At least one filter is required: phenotype_id, phenotype_name, files_fileset, or method.     Set significant=true to return only significant associations.     Set verbose=true to expand both the genomic element and phenotype records.     Pagination is 0-based; maximum page size is 500.<br><br><div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"crispr-screen\">CRISPR screen</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"crispr-screen\"> <strong>CRISPR screen:</strong> <div class=\"method-query-example\"> <strong>Query by phenotype identifier</strong>  <ul> <li>phenotype_id = GO_0008283</li> <li>method = CRISPR screen</li> </ul> </div> <div class=\"method-query-example\"> <strong>Cell migration screen</strong>  <ul> <li>phenotype_name = cell migration</li> <li>files_fileset = IGVFFI5135QZCS</li> </ul> </div> <div class=\"method-query-example\"> <strong>K562 proliferation screen</strong>  <ul> <li>phenotype_name = cell population proliferation</li> <li>files_fileset = IGVFFI4336LSYJ</li> </ul> </div> <div class=\"method-query-example\"> <strong>Significant proliferation associations</strong>  <ul> <li>phenotype_id = GO_0008283</li> <li>significant = true</li> <li>verbose = true</li> </ul> </div> </div> </div>",
         "tags": [
           "IGVF Data"
         ],
@@ -8172,7 +8172,8 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "number",
+              "type": "integer",
+              "minimum": 0,
               "default": 0
             }
           },
@@ -8181,7 +8182,9 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "number"
+              "type": "integer",
+              "exclusiveMinimum": true,
+              "minimum": 0
             }
           }
         ],
@@ -8230,11 +8233,23 @@
                         "type": "number",
                         "nullable": true
                       },
+                      "log2FC": {
+                        "type": "number",
+                        "nullable": true
+                      },
                       "p_value": {
                         "type": "number",
                         "nullable": true
                       },
+                      "p_value_adj": {
+                        "type": "number",
+                        "nullable": true
+                      },
                       "neg_log10_pvalue": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "neg_log10_pvalue_adj": {
                         "type": "number",
                         "nullable": true
                       },
@@ -9737,7 +9752,7 @@
     "/genomic-elements/phenotypes": {
       "get": {
         "operationId": "phenotypesFromGenomicElements",
-        "description": "Retrieve genomic element to phenotype associations by querying genomic elements.<br>     At least one of these properties must be defined: region, files_fileset, phenotype_id, phenotype_name, or method. <br>     Set significant = true to return only significant associations.<br>     Set verbose = true to retrieve full info on the genomic element.<br>     Example: phenotype_id = GO_0016477, <br>     phenotype_name = cell migration, <br>     method = CRISPR screen, <br>     significant = true, <br>     files_fileset = IGVFFI5135QZCS, <br>     region = chr1:101174581-101175330 (maximum length: 10kb). <br>     The limit parameter controls the page size and can not exceed 500. <br>     Pagination is 0-based.",
+        "description": "Retrieve phenotype associations for perturbed genomic elements.<br>     At least one filter is required: region (chr:start-end; maximum length: 10kb), files_fileset, phenotype_id, phenotype_name, or method.     Set significant=true to return only significant associations.     Set verbose=true to expand both the genomic element and phenotype records.     Pagination is 0-based; maximum page size is 500.<br><br><div class=\"method-examples\"> <strong>Examples by method</strong> <p class=\"method-example-description\">These examples are grouped by method; use the <code>method</code> filter to return data from a specific method.</p> <div class=\"method-example-tabs\"> <button class=\"method-example-tab is-active\" data-method-example-tab=\"crispr-screen\">CRISPR screen</button> </div> <div class=\"method-example-panel is-active\" data-method-example-panel=\"crispr-screen\"> <strong>CRISPR screen:</strong> <div class=\"method-query-example\"> <strong>Query by genomic element region</strong>  <ul> <li>region = chr1:101174581-101175330</li> <li>method = CRISPR screen</li> </ul> </div> <div class=\"method-query-example\"> <strong>Cell migration screen</strong>  <ul> <li>phenotype_name = cell migration</li> <li>files_fileset = IGVFFI5135QZCS</li> </ul> </div> <div class=\"method-query-example\"> <strong>K562 proliferation screen</strong>  <ul> <li>phenotype_name = cell population proliferation</li> <li>files_fileset = IGVFFI4336LSYJ</li> </ul> </div> <div class=\"method-query-example\"> <strong>Significant proliferation associations</strong>  <ul> <li>phenotype_id = GO_0008283</li> <li>significant = true</li> <li>verbose = true</li> </ul> </div> </div> </div>",
         "tags": [
           "IGVF Data"
         ],
@@ -9830,7 +9845,8 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "number",
+              "type": "integer",
+              "minimum": 0,
               "default": 0
             }
           },
@@ -9839,7 +9855,9 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "number"
+              "type": "integer",
+              "exclusiveMinimum": true,
+              "minimum": 0
             }
           }
         ],
@@ -9888,11 +9906,23 @@
                         "type": "number",
                         "nullable": true
                       },
+                      "log2FC": {
+                        "type": "number",
+                        "nullable": true
+                      },
                       "p_value": {
                         "type": "number",
                         "nullable": true
                       },
+                      "p_value_adj": {
+                        "type": "number",
+                        "nullable": true
+                      },
                       "neg_log10_pvalue": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "neg_log10_pvalue_adj": {
                         "type": "number",
                         "nullable": true
                       },
