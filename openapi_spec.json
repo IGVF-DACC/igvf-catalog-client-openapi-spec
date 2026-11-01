@@ -3,7 +3,7 @@
   "info": {
     "title": "IGVF Catalog",
     "description": "IGVF Catalog OpenAPI compliant REST API built using tRPC with Express.\n\nOur database uses 0-based, half-open coordinates for genomic coordinates in the GRCh38 (human) and GRCm39 (mouse) reference genomes.\n\nData is licensed under the <a href=https://creativecommons.org/licenses/by/4.0/ target=\"_blank\">Creative Commons license</a> and the software is licensed under the <a href=https://spdx.org/licenses/MIT.html target=\"_blank\">MIT license</a>.",
-    "version": "1.3.1.dev20261030174037"
+    "version": "1.3.1.dev20261101032520"
   },
   "servers": [
     {
@@ -809,6 +809,13 @@
                       },
                       "name": {
                         "type": "string"
+                      },
+                      "aliases": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       },
                       "method": {
                         "type": "string",
@@ -5461,6 +5468,13 @@
                                 "type": "string",
                                 "nullable": true
                               },
+                              "aliases": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
                               "chr": {
                                 "type": "string",
                                 "nullable": true
@@ -5510,19 +5524,19 @@
                         "type": "number",
                         "nullable": true
                       },
-                      "DNA_count_ref": {
+                      "inputCountRef": {
                         "type": "number",
                         "nullable": true
                       },
-                      "DNA_count_alt": {
+                      "inputCountAlt": {
                         "type": "number",
                         "nullable": true
                       },
-                      "RNA_count_ref": {
+                      "outputCountRef": {
                         "type": "number",
                         "nullable": true
                       },
-                      "RNA_count_alt": {
+                      "outputCountAlt": {
                         "type": "number",
                         "nullable": true
                       },
@@ -10172,11 +10186,11 @@
                         "type": "number",
                         "nullable": true
                       },
-                      "DNA_count": {
+                      "inputCount": {
                         "type": "number",
                         "nullable": true
                       },
-                      "RNA_count": {
+                      "outputCount": {
                         "type": "number",
                         "nullable": true
                       },
@@ -10213,6 +10227,13 @@
                               },
                               "name": {
                                 "type": "string"
+                              },
+                              "aliases": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
                               },
                               "method": {
                                 "type": "string",
@@ -11288,6 +11309,13 @@
                               },
                               "name": {
                                 "type": "string"
+                              },
+                              "aliases": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
                               },
                               "method": {
                                 "type": "string",
@@ -13508,6 +13536,13 @@
                                 "type": "string",
                                 "nullable": true
                               },
+                              "aliases": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
+                              },
                               "chr": {
                                 "type": "string",
                                 "nullable": true
@@ -13557,19 +13592,19 @@
                         "type": "number",
                         "nullable": true
                       },
-                      "DNA_count_ref": {
+                      "inputCountRef": {
                         "type": "number",
                         "nullable": true
                       },
-                      "DNA_count_alt": {
+                      "inputCountAlt": {
                         "type": "number",
                         "nullable": true
                       },
-                      "RNA_count_ref": {
+                      "outputCountRef": {
                         "type": "number",
                         "nullable": true
                       },
-                      "RNA_count_alt": {
+                      "outputCountAlt": {
                         "type": "number",
                         "nullable": true
                       },
@@ -13788,11 +13823,11 @@
                         "type": "number",
                         "nullable": true
                       },
-                      "DNA_count": {
+                      "inputCount": {
                         "type": "number",
                         "nullable": true
                       },
-                      "RNA_count": {
+                      "outputCount": {
                         "type": "number",
                         "nullable": true
                       },
@@ -13829,6 +13864,13 @@
                               },
                               "name": {
                                 "type": "string"
+                              },
+                              "aliases": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "nullable": true
                               },
                               "method": {
                                 "type": "string",
@@ -27418,6 +27460,7 @@
                 "doug-fowler",
                 "encode",
                 "gary-hon",
+                "hyejung-won",
                 "j-michael-cherry",
                 "jay-shendure",
                 "jesse-engreitz",
@@ -27444,6 +27487,7 @@
             "schema": {
               "type": "string",
               "enum": [
+                "AAV-MPRA",
                 "ATAC-seq",
                 "CRISPR FACS screen",
                 "CRISPR FlowFISH screen",
@@ -27465,6 +27509,7 @@
                 "Variant painting via fluorescence",
                 "Variant-EFFECTS",
                 "electroporated MPRA",
+                "in vivo MPRA",
                 "in vivo Perturb-seq",
                 "lentiMPRA",
                 "scCRISPR screen",
@@ -27574,6 +27619,7 @@
               "type": "string",
               "enum": [
                 "2024_multistep",
+                "AD_MPRA",
                 "BCalm",
                 "BEDTools",
                 "BIRD",
@@ -27609,10 +27655,13 @@
                 "Seurat",
                 "Snakemake",
                 "Straw",
+                "Tewhey ENCODE allelic MPRA to IGVF converter",
                 "Variant-EFFECTS",
                 "bigWigAverageOverBed",
                 "cV2F",
+                "crossdisorder-MPRA",
                 "cyp2c19_2c9",
+                "in_vivo_MPRA_downstream_analysis",
                 "matplotlib",
                 "mpralm",
                 "pandas",
@@ -27620,6 +27669,7 @@
                 "pybedtools",
                 "scATAC-seq processing",
                 "scE2G",
+                "schizophrenia-MPRA",
                 "snapATAC2",
                 "statsmodels"
               ]

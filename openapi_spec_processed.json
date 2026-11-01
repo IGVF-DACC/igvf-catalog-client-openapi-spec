@@ -3,7 +3,7 @@
   "info": {
     "title": "IGVF Catalog",
     "description": "IGVF Catalog OpenAPI compliant REST API built using tRPC with Express.\n\nOur database uses 0-based, half-open coordinates for genomic coordinates in the GRCh38 (human) and GRCm39 (mouse) reference genomes.\n\nData is licensed under the <a href=https://creativecommons.org/licenses/by/4.0/ target=\"_blank\">Creative Commons license</a> and the software is licensed under the <a href=https://spdx.org/licenses/MIT.html target=\"_blank\">MIT license</a>.",
-    "version": "1.3.1.dev20261030174037"
+    "version": "1.3.1.dev20261101032520"
   },
   "servers": [
     {
@@ -422,7 +422,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GenomicElementFull"
+                    "$ref": "#/components/schemas/GenomicElement11"
                   }
                 }
               }
@@ -11228,6 +11228,7 @@
                 "doug-fowler",
                 "encode",
                 "gary-hon",
+                "hyejung-won",
                 "j-michael-cherry",
                 "jay-shendure",
                 "jesse-engreitz",
@@ -11254,6 +11255,7 @@
             "schema": {
               "type": "string",
               "enum": [
+                "AAV-MPRA",
                 "ATAC-seq",
                 "CRISPR FACS screen",
                 "CRISPR FlowFISH screen",
@@ -11275,6 +11277,7 @@
                 "Variant painting via fluorescence",
                 "Variant-EFFECTS",
                 "electroporated MPRA",
+                "in vivo MPRA",
                 "in vivo Perturb-seq",
                 "lentiMPRA",
                 "scCRISPR screen",
@@ -11384,6 +11387,7 @@
               "type": "string",
               "enum": [
                 "2024_multistep",
+                "AD_MPRA",
                 "BCalm",
                 "BEDTools",
                 "BIRD",
@@ -11419,10 +11423,13 @@
                 "Seurat",
                 "Snakemake",
                 "Straw",
+                "Tewhey ENCODE allelic MPRA to IGVF converter",
                 "Variant-EFFECTS",
                 "bigWigAverageOverBed",
                 "cV2F",
+                "crossdisorder-MPRA",
                 "cyp2c19_2c9",
+                "in_vivo_MPRA_downstream_analysis",
                 "matplotlib",
                 "mpralm",
                 "pandas",
@@ -11430,6 +11437,7 @@
                 "pybedtools",
                 "scATAC-seq processing",
                 "scE2G",
+                "schizophrenia-MPRA",
                 "snapATAC2",
                 "statsmodels"
               ]
@@ -11680,7 +11688,7 @@
         ],
         "additionalProperties": false
       },
-      "AccessibleGenomicElement11": {
+      "AccessibleGenomicElement12": {
         "type": "object",
         "properties": {
           "chr": {
@@ -11698,6 +11706,13 @@
           },
           "name": {
             "type": "string"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
           },
           "method": {
             "type": "string",
@@ -11892,11 +11907,11 @@
             "type": "number",
             "nullable": true
           },
-          "DNA_count": {
+          "inputCount": {
             "type": "number",
             "nullable": true
           },
-          "RNA_count": {
+          "outputCount": {
             "type": "number",
             "nullable": true
           },
@@ -11916,7 +11931,7 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/GenomicElementFull"
+                "$ref": "#/components/schemas/GenomicElement11"
               }
             ]
           },
@@ -11982,7 +11997,7 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/GenomicElement"
+                "$ref": "#/components/schemas/GenomicElement10"
               }
             ],
             "nullable": true
@@ -11999,19 +12014,19 @@
             "type": "number",
             "nullable": true
           },
-          "DNA_count_ref": {
+          "inputCountRef": {
             "type": "number",
             "nullable": true
           },
-          "DNA_count_alt": {
+          "inputCountAlt": {
             "type": "number",
             "nullable": true
           },
-          "RNA_count_ref": {
+          "outputCountRef": {
             "type": "number",
             "nullable": true
           },
-          "RNA_count_alt": {
+          "outputCountAlt": {
             "type": "number",
             "nullable": true
           },
@@ -14426,7 +14441,7 @@
                 "type": "string"
               },
               {
-                "$ref": "#/components/schemas/AccessibleGenomicElement11"
+                "$ref": "#/components/schemas/AccessibleGenomicElement12"
               }
             ],
             "nullable": true
@@ -14572,7 +14587,59 @@
             "type": "string"
           },
           "name": {
+            "type": "string"
+          },
+          "chr": {
+            "type": "string"
+          },
+          "start": {
+            "type": "number"
+          },
+          "end": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          },
+          "source_annotation": {
             "type": "string",
+            "nullable": true
+          },
+          "source": {
+            "type": "string"
+          },
+          "source_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "_id",
+          "name",
+          "chr",
+          "start",
+          "end",
+          "type",
+          "source",
+          "source_url"
+        ],
+        "additionalProperties": false,
+        "nullable": true
+      },
+      "GenomicElement10": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
             "nullable": true
           },
           "chr": {
@@ -14609,15 +14676,9 @@
         ],
         "additionalProperties": false
       },
-      "GenomicElement2": {
+      "GenomicElement11": {
         "type": "object",
         "properties": {
-          "_id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
           "chr": {
             "type": "string"
           },
@@ -14627,29 +14688,47 @@
           "end": {
             "type": "number"
           },
-          "type": {
+          "strand": {
             "type": "string",
             "nullable": true
           },
-          "source": {
-            "type": "string",
+          "name": {
+            "type": "string"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
             "nullable": true
           },
-          "source_url": {
+          "method": {
             "type": "string",
             "nullable": true
           },
           "source_annotation": {
             "type": "string",
             "nullable": true
+          },
+          "type": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "source_url": {
+            "type": "string"
           }
         },
         "required": [
-          "_id",
-          "name",
           "chr",
           "start",
-          "end"
+          "end",
+          "name",
+          "source_annotation",
+          "type",
+          "source",
+          "source_url"
         ],
         "additionalProperties": false
       },
@@ -14762,17 +14841,20 @@
             "type": "number"
           },
           "type": {
-            "type": "string"
-          },
-          "source_annotation": {
             "type": "string",
             "nullable": true
           },
           "source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "source_url": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
+          },
+          "source_annotation": {
+            "type": "string",
+            "nullable": true
           }
         },
         "required": [
@@ -14780,60 +14862,7 @@
           "name",
           "chr",
           "start",
-          "end",
-          "type",
-          "source",
-          "source_url"
-        ],
-        "additionalProperties": false,
-        "nullable": true
-      },
-      "GenomicElementFull": {
-        "type": "object",
-        "properties": {
-          "chr": {
-            "type": "string"
-          },
-          "start": {
-            "type": "number"
-          },
-          "end": {
-            "type": "number"
-          },
-          "strand": {
-            "type": "string",
-            "nullable": true
-          },
-          "name": {
-            "type": "string"
-          },
-          "method": {
-            "type": "string",
-            "nullable": true
-          },
-          "source_annotation": {
-            "type": "string",
-            "nullable": true
-          },
-          "type": {
-            "type": "string"
-          },
-          "source": {
-            "type": "string"
-          },
-          "source_url": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "chr",
-          "start",
-          "end",
-          "name",
-          "source_annotation",
-          "type",
-          "source",
-          "source_url"
+          "end"
         ],
         "additionalProperties": false
       },
@@ -15112,7 +15141,7 @@
             "nullable": true
           },
           "genomic_element": {
-            "$ref": "#/components/schemas/GenomicElement9"
+            "$ref": "#/components/schemas/GenomicElement"
           }
         },
         "required": [
@@ -18326,7 +18355,7 @@
             "nullable": true
           },
           "genomic_element": {
-            "$ref": "#/components/schemas/GenomicElement2"
+            "$ref": "#/components/schemas/GenomicElement9"
           },
           "gene": {
             "$ref": "#/components/schemas/Gene6"
