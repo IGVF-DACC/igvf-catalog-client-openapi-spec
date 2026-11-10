@@ -3,7 +3,7 @@
   "info": {
     "title": "IGVF Catalog",
     "description": "IGVF Catalog OpenAPI compliant REST API built using tRPC with Express.\n\nOur database uses 0-based, half-open coordinates for genomic coordinates in the GRCh38 (human) and GRCm39 (mouse) reference genomes.\n\nData is licensed under the <a href=https://creativecommons.org/licenses/by/4.0/ target=\"_blank\">Creative Commons license</a> and the software is licensed under the <a href=https://spdx.org/licenses/MIT.html target=\"_blank\">MIT license</a>.",
-    "version": "1.3.1.dev20261107033540"
+    "version": "1.3.1.dev20261110000237"
   },
   "servers": [
     {
@@ -4290,6 +4290,13 @@
                         "type": "string",
                         "nullable": true
                       },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
                       "biological_context": {
                         "type": "string",
                         "nullable": true
@@ -5129,6 +5136,13 @@
                       "files_filesets": {
                         "type": "string",
                         "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       }
                     },
                     "required": [
@@ -5617,6 +5631,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       },
                       "source": {
@@ -6178,6 +6199,13 @@
                           "files_filesets": {
                             "type": "string",
                             "nullable": true
+                          },
+                          "preferred_assay_titles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true
                           }
                         },
                         "required": [
@@ -6330,6 +6358,13 @@
                           },
                           "files_filesets": {
                             "type": "string",
+                            "nullable": true
+                          },
+                          "preferred_assay_titles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
                             "nullable": true
                           },
                           "biosample_term": {
@@ -7041,6 +7076,13 @@
                         "type": "string",
                         "nullable": true
                       },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
                       "biological_context": {
                         "type": "string",
                         "nullable": true
@@ -7533,6 +7575,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       },
                       "source": {
@@ -8586,6 +8635,13 @@
                       "files_filesets": {
                         "type": "string",
                         "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       }
                     },
                     "required": [
@@ -9034,6 +9090,13 @@
                           "files_filesets": {
                             "type": "string",
                             "nullable": true
+                          },
+                          "preferred_assay_titles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true
                           }
                         },
                         "required": [
@@ -9186,6 +9249,13 @@
                           },
                           "files_filesets": {
                             "type": "string",
+                            "nullable": true
+                          },
+                          "preferred_assay_titles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
                             "nullable": true
                           },
                           "biosample_term": {
@@ -9465,6 +9535,13 @@
                         "type": "string",
                         "nullable": true
                       },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
                       "source": {
                         "type": "string"
                       },
@@ -9676,6 +9753,13 @@
                       },
                       "files_filesets": {
                         "type": "string"
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       },
                       "perturbation": {
                         "type": "string",
@@ -9984,6 +10068,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       },
                       "biological_context": {
@@ -10339,6 +10430,13 @@
                       },
                       "files_filesets": {
                         "type": "string"
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       },
                       "perturbation": {
                         "type": "string",
@@ -11133,6 +11231,13 @@
                       "files_filesets": {
                         "type": "string"
                       },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
                       "biological_context": {
                         "type": "string",
                         "nullable": true
@@ -11349,6 +11454,13 @@
                       },
                       "files_filesets": {
                         "type": "string"
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       },
                       "perturbation": {
                         "type": "string",
@@ -11764,6 +11876,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       }
                     },
@@ -12287,6 +12406,13 @@
                       },
                       "files_filesets": {
                         "type": "string"
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       },
                       "biological_context": {
                         "type": "string"
@@ -13638,6 +13764,13 @@
                       "files_filesets": {
                         "type": "string",
                         "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       }
                     },
                     "required": [
@@ -13928,6 +14061,13 @@
                       },
                       "files_filesets": {
                         "type": "string"
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       },
                       "perturbation": {
                         "type": "string",
@@ -14436,6 +14576,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       },
                       "source": {
@@ -15096,6 +15243,13 @@
                         "type": "string",
                         "nullable": true
                       },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
                       "biological_context": {
                         "type": "string",
                         "nullable": true
@@ -15401,6 +15555,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       }
                     },
@@ -16019,6 +16180,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       }
                     },
@@ -16727,6 +16895,13 @@
                       "files_filesets": {
                         "type": "string"
                       },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
                       "log2FC": {
                         "type": "number",
                         "nullable": true
@@ -17008,6 +17183,13 @@
                                 "files_filesets": {
                                   "type": "string",
                                   "nullable": true
+                                },
+                                "preferred_assay_titles": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "nullable": true
                                 }
                               },
                               "required": [
@@ -17066,6 +17248,13 @@
                               },
                               "files_filesets": {
                                 "type": "string",
+                                "nullable": true
+                              },
+                              "preferred_assay_titles": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
                                 "nullable": true
                               }
                             },
@@ -17397,6 +17586,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       }
                     },
@@ -19114,6 +19310,13 @@
                       "files_filesets": {
                         "type": "string",
                         "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       }
                     },
                     "required": [
@@ -19776,6 +19979,13 @@
                       "files_filesets": {
                         "type": "string"
                       },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
                       "biological_context": {
                         "type": "string"
                       },
@@ -20238,6 +20448,13 @@
                                       "files_filesets": {
                                         "type": "string",
                                         "nullable": true
+                                      },
+                                      "preferred_assay_titles": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        },
+                                        "nullable": true
                                       }
                                     },
                                     "required": [
@@ -20266,6 +20483,13 @@
                                       },
                                       "files_filesets": {
                                         "type": "string",
+                                        "nullable": true
+                                      },
+                                      "preferred_assay_titles": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        },
                                         "nullable": true
                                       }
                                     },
@@ -20506,6 +20730,13 @@
                                   },
                                   "files_filesets": {
                                     "type": "string",
+                                    "nullable": true
+                                  },
+                                  "preferred_assay_titles": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
                                     "nullable": true
                                   }
                                 },
@@ -20826,6 +21057,13 @@
                                       "files_filesets": {
                                         "type": "string",
                                         "nullable": true
+                                      },
+                                      "preferred_assay_titles": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        },
+                                        "nullable": true
                                       }
                                     },
                                     "required": [
@@ -20854,6 +21092,13 @@
                                       },
                                       "files_filesets": {
                                         "type": "string",
+                                        "nullable": true
+                                      },
+                                      "preferred_assay_titles": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        },
                                         "nullable": true
                                       }
                                     },
@@ -22556,6 +22801,13 @@
                       "files_filesets": {
                         "type": "string",
                         "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       }
                     },
                     "required": [
@@ -22846,6 +23098,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       },
                       "source": {
@@ -24110,6 +24369,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       },
                       "source": {
@@ -26608,6 +26874,13 @@
                       "files_filesets": {
                         "type": "string",
                         "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
                       }
                     },
                     "required": [
@@ -26984,6 +27257,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       }
                     },
@@ -27750,6 +28030,13 @@
                           "files_filesets": {
                             "type": "string",
                             "nullable": true
+                          },
+                          "preferred_assay_titles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true
                           }
                         },
                         "required": [
@@ -27891,6 +28178,13 @@
                           },
                           "files_filesets": {
                             "type": "string",
+                            "nullable": true
+                          },
+                          "preferred_assay_titles": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
                             "nullable": true
                           }
                         },
@@ -28160,6 +28454,13 @@
                         "type": "string",
                         "nullable": true
                       },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true
+                      },
                       "source": {
                         "type": "string"
                       },
@@ -28333,6 +28634,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       },
                       "source": {
@@ -28945,6 +29253,13 @@
                       },
                       "files_filesets": {
                         "type": "string",
+                        "nullable": true
+                      },
+                      "preferred_assay_titles": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
                         "nullable": true
                       }
                     },
