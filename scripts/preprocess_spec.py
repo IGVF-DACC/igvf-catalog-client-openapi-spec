@@ -11,6 +11,7 @@ This produces much shorter model names when used with openapi-generator-cli.
 import argparse
 import copy
 import json
+import re
 import sys
 from collections import Counter, defaultdict
 
@@ -101,6 +102,7 @@ SEMANTIC_NAMES = {
                "spdi"]): "VariantRef",
     frozenset(["alt", "chr", "hgvs", "pos", "ref", "rsid",
                "spdi"]): "VariantMinimal",
+    frozenset(["message"]): "ErrorIssue",
 }
 
 
@@ -198,7 +200,58 @@ def walk_and_collect(spec):
                         "content", "application/json", "schema")
                 walk(resp_schema, base, 0, op_id, None)
 
+    # Schemas the spec already ships in components/schemas (the error.*
+    # schemas of trpc-to-openapi) stay components themselves; only the
+    # object schemas nested inside them are hoisted.
+    existing = spec.get("components", {}).get("schemas", {})
+    for schema_name in sorted(existing):
+        schema = existing[schema_name]
+        if not isinstance(schema, dict):
+            continue
+        for pname in sorted(schema.get("properties", {})):
+            walk(schema["properties"][pname],
+                 ("components", "schemas", schema_name, "properties", pname),
+                 1, schema_name, pname)
+
     return locations
+
+
+def component_name(name):
+    """A generator-friendly PascalCase name for a pre-existing component
+    schema: error.BAD_REQUEST -> ErrorBadRequest."""
+    if re.fullmatch(r"[A-Z][A-Za-z0-9]*", name):
+        return name
+    words = [w for w in re.split(r"[^A-Za-z0-9]+", name) if w]
+    return "".join(
+        w.capitalize() if (w.isupper() or w.islower()) else w[0].upper() + w[1:]
+        for w in words
+    )
+
+
+def rename_existing_components(spec):
+    """Rename pre-existing component schemas with component_name() and
+    rewrite every $ref to them. Returns the new names."""
+    schemas = spec.get("components", {}).get("schemas", {})
+    mapping = {name: component_name(name) for name in schemas}
+    if len(set(mapping.values())) != len(mapping):
+        raise SystemExit(f"component schema names collide after renaming: {mapping}")
+    refs = {f"#/components/schemas/{old}": f"#/components/schemas/{new}"
+            for old, new in mapping.items() if old != new}
+
+    def rewrite(node):
+        if isinstance(node, dict):
+            if node.get("$ref") in refs:
+                node["$ref"] = refs[node["$ref"]]
+            for v in node.values():
+                rewrite(v)
+        elif isinstance(node, list):
+            for v in node:
+                rewrite(v)
+
+    if schemas:
+        spec["components"]["schemas"] = {mapping[k]: v for k, v in schemas.items()}
+        rewrite(spec)
+    return set(mapping.values())
 
 
 def camel_to_pascal(name):
@@ -219,9 +272,9 @@ def to_pascal_case(name):
     return camel_to_pascal(name)
 
 
-def assign_names(groups):
+def assign_names(groups, reserved=()):
     """Assign a component name to each fingerprint group."""
-    used_names = set()
+    used_names = set(reserved)
     names = {}
 
     sorted_groups = sorted(groups.items(), key=lambda x: -len(x[1]))
@@ -524,6 +577,7 @@ def main(argv=None):
             del spec["paths"][path]
             print(f"Removed endpoint: {path}")
 
+    existing_names = rename_existing_components(spec)
     locations = walk_and_collect(spec)
     print(f"Found {len(locations)} inline object schemas")
 
@@ -534,12 +588,13 @@ def main(argv=None):
     dupes = len(locations) - unique
     print(f"Unique: {unique}, Duplicates: {dupes}")
 
-    names = assign_names(dict(groups))
+    names = assign_names(dict(groups), reserved=existing_names)
 
     components = extract_bottom_up(spec, dict(groups), names)
 
-    spec.setdefault("components", {})["schemas"] = dict(
-        sorted(components.items())
+    existing = spec.setdefault("components", {}).get("schemas", {})
+    spec["components"]["schemas"] = dict(
+        sorted({**existing, **components}.items())
     )
 
     wrapper_components = extract_wrapper_schemas(spec)
@@ -574,7 +629,7 @@ def main(argv=None):
         for name in sorted(wrapper_components):
             print(f"  {name}")
 
-    print(f"\nTotal: {len(components)} component schemas")
+    print(f"\nTotal: {len(spec['components']['schemas'])} component schemas")
     print(f"Written to {args.output}")
 
     return 0 if ok else 1

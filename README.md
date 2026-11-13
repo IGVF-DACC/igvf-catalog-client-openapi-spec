@@ -47,14 +47,14 @@ A release that already exists in any of these repos makes the run fail before an
 Actions → *Generate catalog clients* → *Run workflow*:
 
 - `channel`: `dev` or `release`.
-- `ref`: the igvf-catalog sha, branch or tag. It must contain `src/scripts/generateOpenapi.ts`, which was added in igvf-catalog PR #926 (after v1.3).
+- `ref`: the igvf-catalog sha, branch or tag. It must be igvf-catalog PR #956 (`15f86847`) or later: the workflow runs Node 24 with npm 11, and the `package-lock.json` of older refs doesn't install there (`npm ci` fails).
 - `tag`: the igvf-catalog release tag (release channel only). It sets the version.
 - `dry_run` (default **on**): runs everything, including generation and smoke tests, but pushes and releases nothing. The client jobs list the files that would change.
 - `force`: regenerates the dev clients even when the spec is unchanged.
 
 ## Running it locally
 
-Requires Node 20+, Java 11+ and Python 3.9+.
+Requires Node 24, Java 11+ and Python 3.9+.
 
 ```bash
 # 1. dump the spec from an igvf-catalog checkout (dev host shown)
@@ -76,8 +76,8 @@ scripts/generate_client.sh python ../igvf-catalog-python-client build 1.3.1.dev0
 
 | Path | Purpose |
 |---|---|
-| `scripts/remove_endpoints.py` | Drops `/health` and `/autocomplete`, and fixes the `/llm-query` `aql_result` array schema |
-| `scripts/preprocess_spec.py` | Hoists inline schemas into `components/schemas` with readable names, so model names stay short |
+| `scripts/remove_endpoints.py` | Drops `/health` and `/autocomplete`, fixes the `/llm-query` `aql_result` array schema and strips the per-operation `security` requirements (the API is public) |
+| `scripts/preprocess_spec.py` | Hoists inline schemas into `components/schemas` with readable names, so model names stay short. Keeps the component schemas the spec already has and renames them to PascalCase (`error.BAD_REQUEST` → `ErrorBadRequest`) |
 | `scripts/set_spec_version.py` | Sets `info.version`; `--expect-host` guards against shipping a spec for the wrong server |
 | `scripts/spec_changed.py` | Prints `true`/`false`: whether two specs differ, ignoring `info.version` |
 | `scripts/compute_version.py` | Release and dev versions (see the table above) |

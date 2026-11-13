@@ -70,11 +70,11 @@ jobs:
           echo "channel=$CHANNEL ref=$CATALOG_REF tag=$RELEASE_TAG dry_run=$DRY_RUN force=$FORCE"
 
       # Scripts and configs always come from the commit this workflow runs from.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: tools
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: IGVF-DACC/igvf-catalog
           ref: ${{ env.CATALOG_REF }}
@@ -90,13 +90,16 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/setup-node@v4
+      # Matches igvf-catalog's engines.node. Refs older than igvf-catalog PR #956
+      # (15f86847) fail at `npm ci` below: their package-lock.json doesn't
+      # install with the npm that ships with Node 24.
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
           cache-dependency-path: catalog/package-lock.json
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.11'
 
@@ -167,7 +170,7 @@ jobs:
           echo "changed=$changed" >> "$GITHUB_OUTPUT"
           echo "Spec changed: $changed"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: spec
           path: |
@@ -207,11 +210,11 @@ jobs:
       V: ${{ matrix.kind == 'r' && needs.spec.outputs.r_version || needs.spec.outputs.version }}
       SHA: ${{ needs.spec.outputs.catalog_sha }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: tools
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: spec
           path: spec
@@ -236,11 +239,11 @@ jobs:
             git checkout -b "$BRANCH" origin/main
           fi
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
@@ -250,7 +253,7 @@ jobs:
           npm install -g @openapitools/openapi-generator-cli@2.41.0
           tools/scripts/generate_client.sh ${{ matrix.name }} client spec "$V"
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         if: matrix.kind == 'python'
         with:
           python-version: '3.11'
@@ -270,7 +273,7 @@ jobs:
             ${{ matrix.asyncio && '--asyncio' || '' }}
 
       # The mcp job tests against this wheel (it's on PyPI only after the release).
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: matrix.name == 'python-async'
         with:
           name: async-client-wheel
@@ -334,11 +337,11 @@ jobs:
     needs: [spec, clients]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: tools
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: spec
           path: spec
@@ -408,11 +411,11 @@ jobs:
       V: ${{ needs.spec.outputs.version }}
       SHA: ${{ needs.spec.outputs.catalog_sha }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           path: tools
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: async-client-wheel
           path: wheel
@@ -432,7 +435,7 @@ jobs:
           python3 tools/scripts/bump_mcp.py --repo-dir mcp --version "$V"
           git -C mcp diff
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.11'
 

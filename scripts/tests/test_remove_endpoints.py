@@ -19,6 +19,24 @@ def test_clean_spec_is_idempotent(fixture_spec):
     assert json.dumps(remove_endpoints.clean_spec(once), sort_keys=True) == snapshot
 
 
+def operations(spec):
+    return [op for path_item in spec["paths"].values() for op in path_item.values() if isinstance(op, dict)]
+
+
+def test_strips_operation_security(new_spec):
+    assert all("security" in op for op in operations(new_spec))
+    schemes = json.dumps(new_spec["components"]["securitySchemes"], sort_keys=True)
+    assert "Authorization" in new_spec["components"]["securitySchemes"]
+
+    once = remove_endpoints.clean_spec(new_spec)
+    assert operations(once)
+    assert not any("security" in op for op in operations(once))
+    assert json.dumps(once["components"]["securitySchemes"], sort_keys=True) == schemes
+
+    snapshot = json.dumps(once, sort_keys=True)
+    assert json.dumps(remove_endpoints.clean_spec(once), sort_keys=True) == snapshot
+
+
 def test_main_in_place(spec_file):
     remove_endpoints.main(["--input", str(spec_file)])
     spec = json.loads(spec_file.read_text())
