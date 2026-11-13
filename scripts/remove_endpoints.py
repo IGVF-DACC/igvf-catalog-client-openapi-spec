@@ -2,6 +2,7 @@
 
 - Remove unwanted endpoints (health, autocomplete)
 - Fix spec errors (e.g. missing array items schema on /llm-query)
+- Strip the per-operation security requirements (the API is public)
 """
 
 import argparse
@@ -35,6 +36,17 @@ def clean_spec(spec):
     if aql_result.get("type") == "array" and "items" not in aql_result:
         aql_result["items"] = {}
         print("Fixed /llm-query: added missing items schema to aql_result array")
+
+    # The API is public. trpc-to-openapi marks every operation as protected
+    # by default, which would make the generated clients and their READMEs
+    # ask for a bearer token.
+    stripped = 0
+    for path_item in spec.get("paths", {}).values():
+        for op in path_item.values():
+            if isinstance(op, dict) and op.pop("security", None) is not None:
+                stripped += 1
+    if stripped:
+        print(f"Removed security requirements from {stripped} operations")
 
     return spec
 
