@@ -13,6 +13,10 @@ Dev channel: one patch past the latest igvf-catalog release
     GitHub "list releases" API response. Drafts, prereleases and tags that
     don't parse are skipped and the highest remaining version is used. With
     no usable release the base is 0.0.0.
+
+Post channel: a Python client post-release that repackages an earlier release's
+spec. R isn't built, so r_version is empty.
+    --channel post --base 1.3.0 --post 1  -> version=1.3.0.post1  r_version=
 """
 
 import argparse
@@ -21,6 +25,7 @@ import re
 import sys
 
 TAG_RE = re.compile(r"^v?(\d+)\.(\d+)(?:\.(\d+))?$")
+BASE_RE = re.compile(r"^\d+\.\d+\.\d+$")
 
 
 class VersionError(ValueError):
@@ -69,15 +74,25 @@ def dev_versions(base, timestamp):
     return version, r_version
 
 
+def post_versions(base, post):
+    if not base or not BASE_RE.match(base):
+        raise VersionError(f"base version {base!r} is not X.Y.Z")
+    if post < 1:
+        raise VersionError(f"post number {post} is less than 1")
+    return f"{base}.post{post}", ""
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("--channel", choices=["dev", "release"], required=True)
+    parser.add_argument("--channel", choices=["dev", "release", "post"], required=True)
     parser.add_argument("--tag", help="release tag (release channel)")
     parser.add_argument("--latest-tag", help="latest igvf-catalog release tag (dev channel)")
     parser.add_argument("--releases-json", help="GitHub releases API response (dev channel)")
     parser.add_argument("--timestamp", help="YYYYMMDDHHMMSS (dev channel)")
+    parser.add_argument("--base", help="released version X.Y.Z to repackage (post channel)")
+    parser.add_argument("--post", type=int, help="post-release number, 1 or more (post channel)")
     args = parser.parse_args(argv)
 
     try:
@@ -85,6 +100,10 @@ def main(argv=None):
             if not args.tag:
                 parser.error("--tag is required for the release channel")
             version, r_version = release_versions(args.tag)
+        elif args.channel == "post":
+            if not args.base or args.post is None:
+                parser.error("--base and --post are required for the post channel")
+            version, r_version = post_versions(args.base, args.post)
         else:
             if not args.timestamp:
                 parser.error("--timestamp is required for the dev channel")

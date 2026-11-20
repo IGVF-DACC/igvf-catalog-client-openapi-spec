@@ -5,6 +5,11 @@ name: Generate catalog clients
 #   catalog-release  igvf-catalog release       -> spec + clients on main, GitHub releases,
 #                                                  PyPI (via the client repos), MCP release
 # workflow_dispatch runs either channel by hand; dry_run (default) skips every push/release.
+# It also runs the post channel (by hand only):
+#   post  Python client post-release X.Y.Z.postN on main, from the spec released as
+#         vX.Y.Z here (no re-dump, no re-processing). Rebuilds only the two Python
+#         clients and releases them (PyPI via the client repos). R, the spec release
+#         and the MCP are left alone; the MCP pin is changed by hand.
 
 on:
   repository_dispatch:
@@ -13,13 +18,19 @@ on:
     inputs:
       channel:
         type: choice
-        options: [dev, release]
+        options: [dev, release, post]
         required: true
       ref:
-        description: igvf-catalog git ref (sha, branch or tag)
-        required: true
+        description: igvf-catalog git ref (sha, branch or tag; dev and release channels)
+        required: false
       tag:
         description: igvf-catalog release tag (release channel only)
+        required: false
+      base_version:
+        description: released version X.Y.Z whose spec to repackage (post channel only)
+        required: false
+      post_number:
+        description: post-release number N for X.Y.Z.postN, 1 or more (post channel only)
         required: false
       dry_run:
         description: Generate and test, but push and release nothing
@@ -31,8 +42,8 @@ on:
         default: false
 
 concurrency:
-  group: generate-${{ (github.event.action == 'catalog-release' || inputs.channel == 'release') && 'release' || 'dev' }}
-  cancel-in-progress: ${{ !(github.event.action == 'catalog-release' || inputs.channel == 'release') }}
+  group: generate-${{ (github.event.action == 'catalog-release' || inputs.channel == 'release' || inputs.channel == 'post') && 'release' || 'dev' }}
+  cancel-in-progress: ${{ !(github.event.action == 'catalog-release' || inputs.channel == 'release' || inputs.channel == 'post') }}
 
 env:
   CHANNEL: ${{ github.event_name == 'repository_dispatch' && (github.event.action == 'catalog-release' && 'release' || 'dev') || inputs.channel }}
@@ -40,6 +51,8 @@ env:
   RELEASE_TAG: ${{ github.event.client_payload.tag || inputs.tag }}
   DRY_RUN: ${{ inputs.dry_run || false }}
   FORCE: ${{ inputs.force || false }}
+  BASE_VERSION: ${{ inputs.base_version }}
+  POST_NUMBER: ${{ inputs.post_number }}
   DEV_HOST: catalog-api-dev.demo.igvf.org
   PROD_HOST: api.catalogkg.igvf.org
 
@@ -51,23 +64,42 @@ jobs:
       r_version: ${{ steps.version.outputs.r_version }}
       branch: ${{ steps.channel.outputs.branch }}
       changed: ${{ steps.changed.outputs.changed }}
-      catalog_sha: ${{ steps.catalog.outputs.sha }}
+      catalog_sha: ${{ steps.catalog.outputs.sha || steps.released.outputs.sha }}
+      clients: ${{ steps.channel.outputs.clients }}
     steps:
       - name: Resolve channel
         id: channel
         run: |
+          # The clients job's matrix. Generator, config and API tag per name live
+          # in scripts/generate_client.sh.
+          py='{"name":"python","repo":"igvf-catalog-python-client","kind":"python","package":"igvf_catalog_client","api":"IgvfCatalogApi"}'
+          pya='{"name":"python-async","repo":"igvf-catalog-async-python-client","kind":"python","package":"igvf_catalog_async_client","api":"AsyncIgvfCatalogApi","asyncio":true}'
+          r='{"name":"r","repo":"igvf-catalog-r-client","kind":"r"}'
+          clients="[$py,$pya,$r]"
           case "$CHANNEL" in
             dev)     branch=dev;  host=$DEV_HOST ;;
             release) branch=main; host=$PROD_HOST
                      if [ -z "$RELEASE_TAG" ]; then
                        echo "::error::the release channel needs a release tag"; exit 1
                      fi ;;
+            post)    branch=main; host=$PROD_HOST
+                     # R versions can't express .postN; R stays at the base release.
+                     clients="[$py,$pya]"
+                     if [ -z "$BASE_VERSION" ] || [ -z "$POST_NUMBER" ]; then
+                       echo "::error::the post channel needs base_version and post_number"; exit 1
+                     fi
+                     if [ -n "$CATALOG_REF" ] || [ -n "$RELEASE_TAG" ]; then
+                       echo "::error::the post channel takes no ref or tag; it reuses the spec released as v$BASE_VERSION"; exit 1
+                     fi ;;
             *)       echo "::error::unknown channel '$CHANNEL'"; exit 1 ;;
           esac
-          if [ -z "$CATALOG_REF" ]; then echo "::error::no igvf-catalog ref given"; exit 1; fi
-          echo "branch=$branch" >> "$GITHUB_OUTPUT"
-          echo "host=$host" >> "$GITHUB_OUTPUT"
-          echo "channel=$CHANNEL ref=$CATALOG_REF tag=$RELEASE_TAG dry_run=$DRY_RUN force=$FORCE"
+          if [ "$CHANNEL" != post ] && [ -z "$CATALOG_REF" ]; then echo "::error::no igvf-catalog ref given"; exit 1; fi
+          {
+            echo "branch=$branch"
+            echo "host=$host"
+            echo "clients=$clients"
+          } >> "$GITHUB_OUTPUT"
+          echo "channel=$CHANNEL ref=$CATALOG_REF tag=$RELEASE_TAG base_version=$BASE_VERSION post_number=$POST_NUMBER dry_run=$DRY_RUN force=$FORCE"
 
       # Scripts and configs always come from the commit this workflow runs from.
       - uses: actions/checkout@v7
@@ -75,6 +107,7 @@ jobs:
           path: tools
 
       - uses: actions/checkout@v7
+        if: env.CHANNEL != 'post'
         with:
           repository: IGVF-DACC/igvf-catalog
           ref: ${{ env.CATALOG_REF }}
@@ -82,6 +115,7 @@ jobs:
 
       - name: Check igvf-catalog ref
         id: catalog
+        if: env.CHANNEL != 'post'
         working-directory: catalog
         run: |
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
@@ -94,6 +128,7 @@ jobs:
       # (15f86847) fail at `npm ci` below: their package-lock.json doesn't
       # install with the npm that ships with Node 24.
       - uses: actions/setup-node@v7
+        if: env.CHANNEL != 'post'
         with:
           node-version: 24
           cache: npm
@@ -104,6 +139,7 @@ jobs:
           python-version: '3.11'
 
       - name: Dump OpenAPI spec from igvf-catalog
+        if: env.CHANNEL != 'post'
         working-directory: catalog
         env:
           HOST: ${{ steps.channel.outputs.host }}
@@ -113,6 +149,26 @@ jobs:
           IGVF_CATALOG_PROTOCOL=https IGVF_CATALOG_HOSTNAME="$HOST" \
             npx tsx src/scripts/generateOpenapi.ts ../build/openapi_spec.json
 
+      # Post channel: reuse the specs committed at tag v<base_version> as they are.
+      # Re-dumping and re-processing the same catalog release today could give a
+      # different spec.
+      - uses: actions/checkout@v7
+        if: env.CHANNEL == 'post'
+        with:
+          ref: v${{ env.BASE_VERSION }}
+          path: released
+
+      - name: Use the spec released as v${{ env.BASE_VERSION }}
+        id: released
+        if: env.CHANNEL == 'post'
+        run: |
+          mkdir -p build
+          cp released/openapi_spec.json released/openapi_spec_processed.json build/
+          # The release commit's subject is "update-X.Y.Z (igvf-catalog <short sha>)".
+          sha=$(git -C released log -1 --format=%s | sed -nE 's/.*\(igvf-catalog ([0-9a-f]+)\)$/\1/p')
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "v$BASE_VERSION: igvf-catalog ${sha:-unknown}"
+
       - name: Compute version
         id: version
         env:
@@ -120,6 +176,9 @@ jobs:
         run: |
           if [ "$CHANNEL" = release ]; then
             python tools/scripts/compute_version.py --channel release --tag "$RELEASE_TAG" | tee -a "$GITHUB_OUTPUT"
+          elif [ "$CHANNEL" = post ]; then
+            python tools/scripts/compute_version.py --channel post \
+              --base "$BASE_VERSION" --post "$POST_NUMBER" | tee -a "$GITHUB_OUTPUT"
           else
             gh api "repos/IGVF-DACC/igvf-catalog/releases?per_page=100" > build/releases.json
             python tools/scripts/compute_version.py --channel dev \
@@ -127,14 +186,19 @@ jobs:
           fi
 
       - name: Check the release doesn't exist yet
-        if: env.CHANNEL == 'release'
+        if: env.CHANNEL == 'release' || env.CHANNEL == 'post'
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           fail=0
-          for repo in igvf-catalog-client-openapi-spec igvf-catalog-python-client \
-                      igvf-catalog-async-python-client igvf-catalog-r-client igvf-catalog-mcp; do
+          if [ "$CHANNEL" = post ]; then
+            repos="igvf-catalog-python-client igvf-catalog-async-python-client"
+          else
+            repos="igvf-catalog-client-openapi-spec igvf-catalog-python-client
+                   igvf-catalog-async-python-client igvf-catalog-r-client igvf-catalog-mcp"
+          fi
+          for repo in $repos; do
             if gh api "repos/IGVF-DACC/$repo/git/ref/tags/v$VERSION" --silent 2>/dev/null; then
               echo "::error::IGVF-DACC/$repo already has tag v$VERSION; refusing to overwrite it"
               fail=1
@@ -143,6 +207,7 @@ jobs:
           exit $fail
 
       - name: Process spec
+        if: env.CHANNEL != 'post'
         env:
           VERSION: ${{ steps.version.outputs.version }}
           HOST: ${{ steps.channel.outputs.host }}
@@ -158,7 +223,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           BRANCH: ${{ steps.channel.outputs.branch }}
         run: |
-          if [ "$CHANNEL" = release ] || [ "$FORCE" = true ]; then
+          if [ "$CHANNEL" != dev ] || [ "$FORCE" = true ]; then
             changed=true
           else
             # The spec committed on the branch by the last successful run (missing -> changed)
@@ -182,13 +247,14 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
           R_VERSION: ${{ steps.version.outputs.r_version }}
           CHANGED: ${{ steps.changed.outputs.changed }}
-          SHA: ${{ steps.catalog.outputs.sha }}
+          SHA: ${{ steps.catalog.outputs.sha || steps.released.outputs.sha }}
         run: |
+          if [ "$CHANNEL" = post ]; then source="spec v$BASE_VERSION ($SHA)"; else source="\`$CATALOG_REF\` ($SHA)"; fi
           {
             echo "### Spec"
-            echo "| channel | igvf-catalog | version | R version | changed | dry run |"
+            echo "| channel | source | version | R version | changed | dry run |"
             echo "|---|---|---|---|---|---|"
-            echo "| $CHANNEL | \`$CATALOG_REF\` ($SHA) | $VERSION | $R_VERSION | $CHANGED | $DRY_RUN |"
+            echo "| $CHANNEL | $source | $VERSION | $R_VERSION | $CHANGED | $DRY_RUN |"
           } >> "$GITHUB_STEP_SUMMARY"
 
   clients:
@@ -197,11 +263,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          # generator, config and API tag per name live in scripts/generate_client.sh
-          - {name: python,       repo: igvf-catalog-python-client,       kind: python, package: igvf_catalog_client,       api: IgvfCatalogApi}
-          - {name: python-async, repo: igvf-catalog-async-python-client, kind: python, package: igvf_catalog_async_client, api: AsyncIgvfCatalogApi, asyncio: true}
-          - {name: r,            repo: igvf-catalog-r-client,            kind: r}
+        # python, python-async and r; no r for the post channel ("Resolve channel" in the spec job)
+        include: ${{ fromJSON(needs.spec.outputs.clients) }}
     name: client (${{ matrix.name }})
     runs-on: ubuntu-latest
     env:
@@ -317,24 +380,32 @@ jobs:
         run: |
           if git diff --cached --quiet; then
             echo "No changes on $BRANCH"
+          elif [ "$CHANNEL" = post ]; then
+            git commit -m "update-$V (post-release of v$BASE_VERSION, igvf-catalog ${SHA:0:8})"
           else
             git commit -m "update-$V (igvf-catalog ${SHA:0:8})"
           fi
           git push origin "HEAD:$BRANCH"
 
       - name: Release
-        if: env.DRY_RUN != 'true' && env.CHANNEL == 'release'
+        if: env.DRY_RUN != 'true' && (env.CHANNEL == 'release' || env.CHANNEL == 'post')
         working-directory: client
         env:
           GH_TOKEN: ${{ steps.bot.outputs.token }}
         run: |
-          gh release create "v$V" --repo "IGVF-DACC/$REPO" --target main --title "v$V" \
-            --notes "Generated from igvf-catalog $RELEASE_TAG (IGVF-DACC/igvf-catalog@$SHA)"
+          if [ "$CHANNEL" = post ]; then
+            notes="Post-release of v$BASE_VERSION: the same API and spec (IGVF-DACC/igvf-catalog@$SHA), repackaged with the current client templates"
+          else
+            notes="Generated from igvf-catalog $RELEASE_TAG (IGVF-DACC/igvf-catalog@$SHA)"
+          fi
+          gh release create "v$V" --repo "IGVF-DACC/$REPO" --target main --title "v$V" --notes "$notes"
 
   # Commits the spec only after every client succeeded, so a failed run is
-  # retried (spec still "changed") by the next dev push.
+  # retried (spec still "changed") by the next dev push. Skipped for post: the
+  # spec is the one already released as v<base_version>.
   publish-spec:
     needs: [spec, clients]
+    if: inputs.channel != 'post'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -403,6 +474,8 @@ jobs:
 
   # Release only: re-pin igvf-catalog-mcp to the new async client, version it
   # like the catalog and release it (its release_to_pypi.yml publishes it).
+  # Never for post: MCP .postN numbers are independent of the clients', and the
+  # MCP pin to a client post-release is set by hand.
   mcp:
     needs: [spec, clients]
     if: needs.spec.outputs.changed == 'true' && (github.event.action == 'catalog-release' || inputs.channel == 'release')

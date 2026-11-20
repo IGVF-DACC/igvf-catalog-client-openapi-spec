@@ -75,3 +75,45 @@ def test_main_dev_releases_json(tmp_path, capsys):
     path.write_text(json.dumps([{"tag_name": "v.1.0.0.1"}, {"tag_name": "v1.0.2"}]))
     assert cv.main(["--channel", "dev", "--releases-json", str(path), "--timestamp", "20261012153000"]) == 0
     assert capsys.readouterr().out == "version=1.0.3.dev20261012153000\nr_version=1.0.2.9000\n"
+
+
+@pytest.mark.parametrize("base,post,expected", [
+    ("1.3.0", 1, "1.3.0.post1"),
+    ("1.3.0", 12, "1.3.0.post12"),
+    ("10.20.30", 2, "10.20.30.post2"),
+])
+def test_post_versions(base, post, expected):
+    assert cv.post_versions(base, post) == (expected, "")
+
+
+@pytest.mark.parametrize("base", ["1.3", "v1.3.0", "1.3.0.post1", "1.3.0.4", "", "1.3.x"])
+def test_post_versions_rejects_bad_base(base):
+    with pytest.raises(cv.VersionError):
+        cv.post_versions(base, 1)
+
+
+@pytest.mark.parametrize("post", [0, -1])
+def test_post_versions_rejects_bad_post(post):
+    with pytest.raises(cv.VersionError):
+        cv.post_versions("1.3.0", post)
+
+
+def test_main_post(capsys):
+    assert cv.main(["--channel", "post", "--base", "1.3.0", "--post", "1"]) == 0
+    assert capsys.readouterr().out == "version=1.3.0.post1\nr_version=\n"
+
+
+def test_main_post_bad_base(capsys):
+    assert cv.main(["--channel", "post", "--base", "1.3", "--post", "1"]) == 1
+    assert capsys.readouterr().out == ""
+
+
+def test_main_post_bad_post(capsys):
+    assert cv.main(["--channel", "post", "--base", "1.3.0", "--post", "0"]) == 1
+    assert capsys.readouterr().out == ""
+
+
+@pytest.mark.parametrize("args", [["--base", "1.3.0"], ["--post", "1"], []])
+def test_main_post_missing_args(args):
+    with pytest.raises(SystemExit):
+        cv.main(["--channel", "post", *args])
