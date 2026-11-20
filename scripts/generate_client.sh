@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Regenerate one client in place: wipe the files the generator wrote last time,
 # run openapi-generator with the pinned version, reorder the README endpoint
-# table and copy the specs in. Used by generate-clients.yml and for local runs.
+# table and copy the specs in. Both specs go to the client repo root; the Python
+# clients also get openapi_spec_processed.json inside the package directory, so
+# it ships in the wheel and sdist (the client's setup.py lists it in
+# package_data). Used by generate-clients.yml and for local runs.
 #
 #   scripts/generate_client.sh <python|python-async|r> <client_dir> <spec_dir> <version>
 #
@@ -9,7 +12,7 @@
 set -euo pipefail
 
 if [ $# -ne 4 ]; then
-  sed -n '2,8p' "$0" >&2
+  sed -n '2,11p' "$0" >&2
   exit 2
 fi
 
@@ -20,9 +23,9 @@ version=$4
 tools_dir=$(cd "$(dirname "$0")/.." && pwd)
 
 case "$name" in
-  python)       generator=python; tag=IgvfCatalog;      repo=igvf-catalog-python-client ;;
-  python-async) generator=python; tag=AsyncIgvfCatalog; repo=igvf-catalog-async-python-client ;;
-  r)            generator=r;      tag=IgvfCatalog;      repo=igvf-catalog-r-client ;;
+  python)       generator=python; tag=IgvfCatalog;      repo=igvf-catalog-python-client;       package=igvf_catalog_client ;;
+  python-async) generator=python; tag=AsyncIgvfCatalog; repo=igvf-catalog-async-python-client; package=igvf_catalog_async_client ;;
+  r)            generator=r;      tag=IgvfCatalog;      repo=igvf-catalog-r-client;            package= ;;
   *) echo "unknown client '$name'" >&2; exit 2 ;;
 esac
 
@@ -56,3 +59,6 @@ if [ -d templates ]; then templates=(-t templates); fi
 
 python3 "$tools_dir/scripts/reorder_readme.py" --readme README.md --ordering "$tools_dir/ordering.txt"
 cp "$spec_dir/openapi_spec.json" "$spec_dir/openapi_spec_processed.json" .
+# Not listed in .openapi-generator/FILES, so the wipe above leaves it alone;
+# this copy overwrites it on every run.
+if [ -n "$package" ]; then cp "$spec_dir/openapi_spec_processed.json" "$package/"; fi
